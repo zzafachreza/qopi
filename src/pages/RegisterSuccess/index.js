@@ -8,7 +8,7 @@ import axios from 'axios'
 import OTPTextInput from 'react-native-otp-textinput';
 import { Modalize } from 'react-native-modalize';
 
-export default function RegisterSuccess() {
+export default function RegisterSuccess({ navigation }) {
     return (
         <View style={{
             flex: 1,
@@ -36,7 +36,7 @@ export default function RegisterSuccess() {
                 textAlign: 'center'
             }}>Terimakasih telah bergabung dengan kami. Silahkan menikmati semua fitur yang kami sediakan.</Text>
 
-            <MyButton warna={colors.primary} title="Lanjutkan" />
+            <MyButton onPress={() => navigation.navigate('Login')} warna={colors.primary} title="Lanjutkan" />
         </View>
     )
 }

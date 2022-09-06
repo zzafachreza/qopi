@@ -15,6 +15,7 @@ export default function MyInput({
   secureTextEntry,
   styleInput,
   placeholder,
+  nolabel = false,
   autoFocus,
   multiline,
   label2,
@@ -23,13 +24,13 @@ export default function MyInput({
 }) {
   return (
     <>
-      <Text style={{
+      {!nolabel && <Text style={{
         fontFamily: fonts.primary.normal,
         fontSize: myDimensi / 2,
         color: colors.border_label,
         marginBottom: 5,
       }}>{label}</Text>
-
+      }
       <View style={{
         position: 'relative'
       }}>
@@ -42,7 +43,7 @@ export default function MyInput({
         }}>
           <Icon type='ionicon' name={iconname} size={myDimensi / 1.6} color={colors.primary} />
         </View>
-        <TextInput autoFocus={autoFocus} autoCapitalize='none' value={value} onChangeText={onChangeText}
+        <TextInput autoFocus={autoFocus} autoCapitalize='none' value={value} multiline={multiline} onChangeText={onChangeText}
           keyboardType={keyboardType}
           style={{
             borderWidth: 1,

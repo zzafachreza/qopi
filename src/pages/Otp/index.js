@@ -7,47 +7,49 @@ import { MyButton, MyGap, MyInput } from '../../components'
 import axios from 'axios'
 import OTPTextInput from 'react-native-otp-textinput';
 import { Modalize } from 'react-native-modalize';
-
-export default function Otp({ navigation }) {
+import CountDown from 'react-native-countdown-component';
+import { apiURL } from '../../utils/localStorage'
+import { showMessage, hideMessage } from "react-native-flash-message";
+export default function Otp({ navigation, route }) {
 
     const modalizeRef = useRef();
 
     const [timerCount, setTimer] = useState('01:34')
 
     useEffect(() => {
-        // startTimer(60)
+
     }, []);
 
-    const startTimer = (duration) => {
-        var timer = duration, minutes, seconds;
-        setInterval(function () {
-            minutes = parseInt(timer / 60, 10);
-            seconds = parseInt(timer % 60, 10);
 
-            minutes = minutes < 10 ? "0" + minutes : minutes;
-            seconds = seconds < 10 ? "0" + seconds : seconds;
-
-            console.log(minutes + ":" + seconds);
-            setTimer(minutes + ":" + seconds)
-
-            if (--timer < 0) {
-                timer = duration;
-            }
-        }, 1000);
-    }
 
 
     const [loading, setLoading] = useState(false);
     const [buka, setBuka] = useState(true);
 
-    const [kirim, setKirim] = useState({
-        email: '',
-        password: '',
-    });
+    const [kirim, setKirim] = useState(route.params);
 
 
-    const __masuk_via_email = () => {
-        navigation.navigate('RegisterSuccess');
+    const __kirim_otp = () => {
+
+        setLoading(true);
+
+        setTimeout(() => {
+            axios.post(apiURL + 'v1_otp.php', kirim).then(res => {
+                console.log(res.data);
+                if (res.data.status == 404) {
+                    showMessage({
+                        type: 'danger',
+                        message: res.data.message
+                    })
+                } else {
+                    navigation.navigate('RegisterSuccess')
+                }
+
+            });
+
+            setLoading(false);
+        }, 1000)
+
     }
 
     return (
@@ -84,7 +86,7 @@ export default function Otp({ navigation }) {
                         color: colors.black_font,
                         textAlign: 'center'
                     }}>Masukkan kode yang kami kirimkan ke
-                        email aly****@gmail.com</Text>
+                        email {kirim.email.replace(kirim.email.substr(0, 5), '*****')}</Text>
 
 
 
@@ -97,17 +99,25 @@ export default function Otp({ navigation }) {
 
                 }}>
 
-                    <Text style={{
-                        fontFamily: fonts.primary[800],
-                        fontSize: myDimensi,
-                        color: colors.black_font,
-                        textAlign: 'center',
-                        marginVertical: 20,
-                    }}>{timerCount}</Text>
+                    <CountDown
+                        until={10}
+                        size={20}
+                        onFinish={() => console.log('Finished')}
+                        digitStyle={{ backgroundColor: colors.black }}
+                        digitTxtStyle={{ color: colors.white }}
+                        timeToShow={['M', 'S']}
+                        timeLabels={{ m: '', s: '' }}
+                    />
                     <View style={{
                         padding: 20,
                     }}>
-                        <OTPTextInput tintColor={colors.primary} />
+                        <OTPTextInput handleTextChange={x => {
+                            console.log(x)
+                            setKirim({
+                                ...kirim,
+                                otp: x
+                            })
+                        }} tintColor={colors.primary} />
                     </View>
                     <Text style={{
                         fontFamily: fonts.primary.normal,
@@ -132,7 +142,7 @@ export default function Otp({ navigation }) {
                         padding: 10,
                         borderRadius: 10,
                     }}>
-                        {!loading && <MyButton onPress={__masuk_via_email} title="Konfirmasi" warna={colors.primary} />}
+                        {!loading && <MyButton onPress={__kirim_otp} title="Konfirmasi" warna={colors.primary} />}
                     </View>
 
                     {loading && <ActivityIndicator color={colors.primary} size="large" />}

@@ -13,4 +13,7 @@ export const colors = {
   border_form: '#E0E0E0',
   border_card: '#F2F2F2',
   black_font: '#333333',
+  member_card: '#EEE9DD',
+  grey_base: '#744C27',
+  primary_light: '#ECFCF5'
 };

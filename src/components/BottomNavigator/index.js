@@ -19,7 +19,7 @@ export default function BottomNavigator({ state, descriptors, navigation }) {
   }
 
   return (
-    <View style={{ backgroundColor: colors.primary, flexDirection: 'row' }}>
+    <View style={{ backgroundColor: colors.white, flexDirection: 'row' }}>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
         const label =
@@ -51,19 +51,19 @@ export default function BottomNavigator({ state, descriptors, navigation }) {
         };
 
         let iconName = 'home';
-        let labelName = 'Home';
+        let labelName = 'Beranda';
 
         if (label === 'Home') {
           iconName = 'home-outline';
         } else if (label === 'Account') {
           iconName = 'person-outline';
-          labelName = 'Akun Saya'
-        } else if (label === 'Kategori') {
-          iconName = 'grid-outline';
-          labelName = 'Kategori';
-        } else if (label === 'CartBarang') {
-          iconName = 'cart-outline';
-          labelName = 'Barang';
+          labelName = 'Akun'
+        } else if (label === 'History') {
+          iconName = 'receipt-outline';
+          labelName = 'Transaksi';
+        } else if (label === 'Wish') {
+          iconName = 'heart-outline';
+          labelName = 'Favorit';
         } else if (label === 'CartSewa') {
           iconName = 'file-tray-full-outline';
           labelName = 'Sewa';
@@ -110,13 +110,13 @@ export default function BottomNavigator({ state, descriptors, navigation }) {
                   name={isFocused ? iconName.replace('-outline', '') : iconName}
                   type="ionicon"
                   size={windowWidth / 20}
-                  color={isFocused ? colors.white : colors.white}
+                  color={isFocused ? colors.primary : colors.primary}
                 />
 
                 <Text
                   style={{
                     fontSize: windowWidth / 45,
-                    color: isFocused ? colors.white : colors.white,
+                    color: isFocused ? colors.primary : colors.primary,
                   }}>
                   {labelName}
                 </Text>

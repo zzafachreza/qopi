@@ -5,6 +5,9 @@ import { colors } from '../../utils/colors'
 import { Icon } from 'react-native-elements'
 import { MyButton, MyGap, MyInput } from '../../components'
 import axios from 'axios'
+import LottieView from 'lottie-react-native'
+import { apiURL, storeData, urlToken } from '../../utils/localStorage'
+import { showMessage, hideMessage } from "react-native-flash-message";
 import { Modalize } from 'react-native-modalize';
 
 export default function Login({ navigation }) {
@@ -15,13 +18,36 @@ export default function Login({ navigation }) {
   const [buka, setBuka] = useState(true);
 
   const [kirim, setKirim] = useState({
+    api_token: urlToken,
     email: '',
     password: '',
   });
 
 
   const __masuk_via_email = () => {
+    console.log(kirim);
 
+    setLoading(true);
+
+    setTimeout(() => {
+      console.log('send server', kirim);
+      axios.post(apiURL + 'v1_login.php', kirim).then(res => {
+        console.log(res.data);
+        setLoading(false);
+
+        if (res.data.status === 404) {
+          showMessage({
+            type: 'danger',
+            message: res.data.message
+          })
+        } else if (res.data.status === 200) {
+          storeData('user', res.data);
+          navigation.replace('MainApp');
+
+        }
+      })
+
+    }, 1200)
   }
 
   return (
@@ -251,6 +277,16 @@ export default function Login({ navigation }) {
           </View>
         </Modalize >
       </ScrollView>
+      {
+        loading && (
+          <LottieView
+            source={require('../../assets/animation.json')}
+            autoPlay
+            loop
+            style={{ backgroundColor: colors.primary }}
+          />
+        )
+      }
     </SafeAreaView>
 
 

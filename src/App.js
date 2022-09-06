@@ -5,7 +5,7 @@ import Router from './routes';
 import { LogBox, StatusBar } from 'react-native';
 import FlashMessage from 'react-native-flash-message';
 import { colors } from './utils/colors';
-
+import Toast from 'react-native-toast-message';
 import PushNotification from 'react-native-push-notification';
 import { storeData } from './utils/localStorage';
 
@@ -14,8 +14,8 @@ export default function App() {
 
   PushNotification.createChannel(
     {
-      channelId: 'motekarpulsa', // (required)
-      channelName: 'motekarpulsa', // (required)
+      channelId: 'qopi', // (required)
+      channelName: 'qopi', // (required)
       channelDescription: 'A channel to categorise your notifications', // (optional) default: undefined.
       playSound: true, // (optional) default: true
       soundName: 'default', // (optional) See `soundName` parameter of `localNotification` function

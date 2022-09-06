@@ -10,7 +10,7 @@ export default function GetStarted({ navigation }) {
             flex: 1,
             padding: 10,
         }}>
-            <StatusBar translucent={true} backgroundColor={'transparent'} />
+            {/* <StatusBar translucent={true} backgroundColor={'transparent'} /> */}
             <View style={{
                 flex: 1,
                 justifyContent: 'center',

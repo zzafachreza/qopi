@@ -5,6 +5,10 @@ import { colors } from '../../utils/colors'
 import { Icon } from 'react-native-elements'
 import { MyButton, MyGap } from '../../components'
 import axios from 'axios'
+import LottieView from 'lottie-react-native'
+import { apiURL, urlToken } from '../../utils/localStorage'
+import Toast from 'react-native-toast-message'
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 export default function Register({ navigation }) {
 
@@ -14,13 +18,38 @@ export default function Register({ navigation }) {
   const [buka, setBuka] = useState(true);
 
   const [kirim, setKirim] = useState({
-    email: '',
-    password: '',
+    api_token: urlToken,
+    nama_lengkap: null,
+    email: null,
+    telepon: null,
+    password: null,
   });
 
 
   const __masuk_via_email = () => {
-    navigation.navigate('Otp')
+
+
+    setLoading(true);
+
+    setTimeout(() => {
+      console.log('send server', kirim);
+      axios.post(apiURL + 'v1_register.php', kirim).then(res => {
+        console.log(res.data);
+        setLoading(false);
+
+        if (res.data.status === 400) {
+          showMessage({
+            type: 'danger',
+            message: res.data.message
+          })
+        } else {
+          navigation.navigate('Otp', kirim)
+        }
+      })
+
+    }, 1200)
+
+
   }
 
   return (
@@ -89,9 +118,9 @@ export default function Register({ navigation }) {
             }}>
               <Icon type='ionicon' name='person-outline' size={myDimensi / 1.6} color={colors.primary} />
             </View>
-            <TextInput autoCapitalize='none' value={kirim.email} onChangeText={v => setKirim({
+            <TextInput autoCapitalize='none' value={kirim.nama_lengkap} onChangeText={v => setKirim({
               ...kirim,
-              email: v
+              nama_lengkap: v
             })}
 
               style={{
@@ -127,9 +156,9 @@ export default function Register({ navigation }) {
             }}>
               <Icon type='ionicon' name='call-outline' size={myDimensi / 1.6} color={colors.primary} />
             </View>
-            <TextInput autoCapitalize='none' value={kirim.email} onChangeText={v => setKirim({
+            <TextInput autoCapitalize='none' value={kirim.telepon} onChangeText={v => setKirim({
               ...kirim,
-              email: v
+              telepon: v
             })}
               keyboardType='phone-pad'
               style={{
@@ -258,7 +287,16 @@ export default function Register({ navigation }) {
         </View>
       </ScrollView>
 
-
+      {
+        loading && (
+          <LottieView
+            source={require('../../assets/animation.json')}
+            autoPlay
+            loop
+            style={{ backgroundColor: colors.primary }}
+          />
+        )
+      }
 
     </SafeAreaView>
 

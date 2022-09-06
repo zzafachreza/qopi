@@ -15,6 +15,7 @@ import { useNavigation } from '@react-navigation/native';
 import { fonts } from '../../utils/fonts';
 import { Icon } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { apiURL } from '../../utils/localStorage';
 
 export default function MyCarouser() {
   const [activeSlide, setActiveSlide] = useState(0);
@@ -23,35 +24,23 @@ export default function MyCarouser() {
   const navigation = useNavigation();
 
   useEffect(() => {
-    // axios.get('https://motekarpulsa.zavalabs.com/api/slider.php').then(res => {
-    //   console.log(res.data);
-    //   setData(res.data);
-    // });
+    axios.get(apiURL + 'v1_slider.php').then(res => {
+      console.log(res.data);
+      setData(res.data);
+    });
   }, []);
 
-  const [data, setData] = useState([
-    {
-      image: 'https://ayokulakan.com/storage/asset/slider/xQuSsaNN0BARqQR0P0mlNKplc8N6siYB4CttpTZL.png'
-    },
-    {
-      image: 'https://ayokulakan.com/storage/asset/slider/EWo3VT0BLdFVb1cnKXndHX5WYxc8NM6k3UQzyAVL.jpg'
-    },
-    {
-      image: 'https://ayokulakan.com/storage/asset/slider/oa8w6qCV7enWe6WDUP6H0szsTtJDHGHh5Osqyy8d.jpg'
-    },
-    {
-      image: 'https://ayokulakan.com/storage/asset/slider/ztzUdtLGgzPVqNTykqE7cd3Dt92ceUyZR9Lk2M9Z.jpg'
-    }
-  ]);
+  const [data, setData] = useState([]);
 
   const renderCarouselItem = ({ item }) => (
     <Image
       source={{ uri: item.image }}
       style={{
-        resizeMode: 'cover',
-        height: 180,
-        width: 300,
-        borderRadius: 10,
+        // flex: 1,
+        // resizeMode: 'contain',
+        height: 150,
+        width: windowWidth,
+        // borderRadius: 10,
       }}
     />
   );
@@ -61,13 +50,13 @@ export default function MyCarouser() {
       <Carousel
         loop={true}
         // layout="stack"
-        layoutCardOffset={18}
+        layoutCardOffset={0}
         data={data}
         containerCustomStyle={styles.carousel}
         renderItem={renderCarouselItem}
-        sliderWidth={Dimensions.get('window').width}
-        itemWidth={300}
-        removeClippedSubviews={false}
+        sliderWidth={windowWidth}
+        itemWidth={windowWidth}
+        removeClippedSubviews={true}
       />
     </View>
   );

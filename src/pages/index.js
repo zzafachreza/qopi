@@ -7,6 +7,9 @@ import Home from './Home';
 import Category from './Category';
 import Product from './Product';
 import RegisterSuccess from './RegisterSuccess';
+import History from './History';
+import Wish from './Wish';
+import Account from './Account';
 
 
 
@@ -22,6 +25,9 @@ export {
   Login,
   Home,
   Category,
-  Product
+  Product,
+  History,
+  Wish,
+  Account
 
 };
