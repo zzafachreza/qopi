@@ -15,5 +15,6 @@ export const colors = {
   black_font: '#333333',
   member_card: '#EEE9DD',
   grey_base: '#744C27',
-  primary_light: '#ECFCF5'
+  primary_light: '#ECFCF5',
+  secondary_base: '#F3B33D'
 };

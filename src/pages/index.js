@@ -10,6 +10,8 @@ import RegisterSuccess from './RegisterSuccess';
 import History from './History';
 import Wish from './Wish';
 import Account from './Account';
+import AccountEdit from './AccountEdit';
+import Cart from './Cart';
 
 
 
@@ -28,6 +30,8 @@ export {
   Product,
   History,
   Wish,
-  Account
+  Account,
+  AccountEdit,
+  Cart
 
 };

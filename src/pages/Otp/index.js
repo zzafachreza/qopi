@@ -100,7 +100,7 @@ export default function Otp({ navigation, route }) {
                 }}>
 
                     <CountDown
-                        until={10}
+                        until={120}
                         size={20}
                         onFinish={() => console.log('Finished')}
                         digitStyle={{ backgroundColor: colors.black }}

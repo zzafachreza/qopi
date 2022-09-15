@@ -6,9 +6,10 @@ import {
     SafeAreaView,
     Image,
     Linking,
+    Alert,
 } from 'react-native';
 import { windowWidth, fonts } from '../../utils/fonts';
-import { getData, storeData, urlAPI, urlApp } from '../../utils/localStorage';
+import { getData, storeData, urlAPI, urlApp, urlAvatar } from '../../utils/localStorage';
 import { colors } from '../../utils/colors';
 import { MyButton, MyGap } from '../../components';
 import { Icon } from 'react-native-elements';
@@ -39,9 +40,20 @@ export default function Account({ navigation, route }) {
     }, []);
 
     const btnKeluar = () => {
-        storeData('user', null);
+        Alert.alert('Qopi untuk semua', 'Apakah kamu yakin akan keluar ?', [
+            {
+                text: 'Batal',
+                style: "cancel"
+            },
+            {
+                text: 'Keluar',
+                onPress: () => {
+                    storeData('user', null);
 
-        navigation.replace('Login');
+                    navigation.replace('Login');
+                }
+            }
+        ])
     };
 
     const MyList = ({ label, value }) => {
@@ -81,12 +93,12 @@ export default function Account({ navigation, route }) {
                 alignItems: 'center',
             }}>
                 <Image source={{
-                    uri: urlApp + 'fotosiswa/' + user.foto_user,
-                    // uri: 'https://kepul.zavalabs.com/fotosiswa/411b42f077583af897e9710c73c1e1bd58fe4c15fotosiswa.jpg'
+                    uri: user.foto_user == '' ? 'https://zavalabs.com/nogambar.jpg' : urlAvatar + user.foto_user,
+
                 }} style={{
                     width: windowWidth / 2.5,
                     height: windowWidth / 2.5,
-                    borderRadius: windowWidth / 20
+                    borderRadius: (windowWidth / 2.5) / 2
                 }} />
             </View>
 
@@ -103,6 +115,19 @@ export default function Account({ navigation, route }) {
                     margin: 5
                 }}>
                     <MyButton
+                        onPress={() => navigation.navigate('AccountEdit', user)}
+                        title="Edit Profil"
+                        colorText={colors.white}
+                        iconColor={colors.white}
+                        warna={colors.primary}
+                        Icons="create-outline"
+                    />
+                </View>
+                <View style={{
+                    flex: 1,
+                    margin: 5
+                }}>
+                    <MyButton
                         onPress={btnKeluar}
                         title="Keluar"
                         colorText={colors.white}
@@ -111,19 +136,7 @@ export default function Account({ navigation, route }) {
                         Icons="log-out-outline"
                     />
                 </View>
-                <View style={{
-                    flex: 1,
-                    margin: 5
-                }}>
-                    <MyButton
-                        onPress={() => navigation.navigate('EditProfile', user)}
-                        title="Edit Profile"
-                        colorText={colors.white}
-                        iconColor={colors.white}
-                        warna={colors.secondary}
-                        Icons="create-outline"
-                    />
-                </View>
+
             </View>
         </SafeAreaView >
     );

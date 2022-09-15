@@ -9,17 +9,25 @@ import 'intl';
 import 'intl/locale-data/jsonp/en';
 import { ImageBackground } from 'react-native';
 import { MyInput } from '../../components';
+import LottieView from 'lottie-react-native'
+
 
 export default function Product({ navigation, route }) {
 
     const item = route.params;
-
+    const [loading, setLoading] = useState(false);
 
     const [barang, setBarang] = useState({
         fid_barang: route.params.id,
         harga_barang: route.params.harga_barang,
+        harga_dasar: route.params.harga_dasar,
+        diskon: route.params.diskon,
         qty: 1,
         total_topping: 0,
+        suhu: 'Cold',
+        ukuran: 'Regular',
+        gula: 'Normal',
+        es: 'Normal',
         topping: []
     })
 
@@ -272,6 +280,11 @@ export default function Product({ navigation, route }) {
                                         })
                                         setSuhu(items);
 
+                                        setBarang({
+                                            ...barang,
+                                            suhu: item.name
+                                        })
+
                                     }} style={item.pilih ? styles.ok : styles.not}>
                                         <Text style={item.pilih ? styles.textOk : styles.textNot}>{item.name}</Text>
                                     </TouchableOpacity>
@@ -325,6 +338,10 @@ export default function Product({ navigation, route }) {
                                             items[i.id].pilih = 0;
                                         })
                                         setUkuran(items);
+                                        setBarang({
+                                            ...barang,
+                                            ukuran: item.name
+                                        })
 
                                     }} style={item.pilih ? styles.ok : styles.not}>
                                         <Text style={item.pilih ? styles.textOk : styles.textNot}>{item.name}</Text>
@@ -379,6 +396,10 @@ export default function Product({ navigation, route }) {
                                             items[i.id].pilih = 0;
                                         })
                                         setGula(items);
+                                        setBarang({
+                                            ...barang,
+                                            gula: item.name
+                                        })
 
                                     }} style={item.pilih ? styles.ok : styles.not}>
                                         <Text style={item.pilih ? styles.textOk : styles.textNot}>{item.name}</Text>
@@ -434,6 +455,10 @@ export default function Product({ navigation, route }) {
                                             items[i.id].pilih = 0;
                                         })
                                         setEs(items);
+                                        setBarang({
+                                            ...barang,
+                                            es: item.name
+                                        })
 
                                     }} style={item.pilih ? styles.ok : styles.not}>
                                         <Text style={item.pilih ? styles.textOk : styles.textNot}>{item.name}</Text>
@@ -552,13 +577,46 @@ export default function Product({ navigation, route }) {
                 }}>Masukan Keranjang</Text>
 
                 <TouchableOpacity onPress={() => {
-                    console.log(barang);
+
                     getData('user').then(user => {
                         if (!user) {
                             console.log('harus login');
-                            navigation.replace('Register')
+                            navigation.replace('Login')
                         } else {
-                            console.log('tambah Keranjang');
+
+                            // console.log(barang);
+                            let kirim = barang;
+                            kirim.fid_user = user.id;
+                            kirim.api_token = urlToken;
+                            console.warn('send server', kirim);
+
+
+                            console.log(kirim);
+
+                            // setLoading(true);
+
+                            setTimeout(() => {
+
+                                axios.post(apiURL + 'v1_cart_add.php', kirim).then(res => {
+                                    console.log(res.data);
+                                    setLoading(false);
+
+                                    // if (res.data.status === 404) {
+                                    //     showMessage({
+                                    //         type: 'danger',
+                                    //         message: res.data.message
+                                    //     })
+                                    // } else if (res.data.status === 200) {
+                                    //     storeData('user', res.data);
+                                    //     navigation.replace('MainApp');
+
+                                    // }
+                                })
+
+                            }, 1200)
+
+
+
                         }
                     })
                 }} style={{
@@ -593,6 +651,16 @@ export default function Product({ navigation, route }) {
 
 
             </View>
+            {
+                loading && (
+                    <LottieView
+                        source={require('../../assets/animation.json')}
+                        autoPlay
+                        loop
+                        style={{ backgroundColor: colors.primary }}
+                    />
+                )
+            }
         </>
     )
 }

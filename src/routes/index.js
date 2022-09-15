@@ -19,7 +19,9 @@ import {
   RegisterSuccess,
   Wish,
   History,
-  Account
+  Account,
+  AccountEdit,
+  Cart
 } from '../pages';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { BottomNavigator } from '../components';
@@ -125,6 +127,33 @@ export default function Router() {
         component={RegisterSuccess}
         options={{
           headerShown: false,
+        }}
+      />
+
+
+
+      <Stack.Screen
+        name="AccountEdit"
+        component={AccountEdit}
+        options={{
+          headerShown: true,
+          headerTitle: 'Edit Profil',
+          headerTintColor: colors.white,
+          headerStyle: {
+            backgroundColor: colors.primary
+          }
+        }}
+      />
+      <Stack.Screen
+        name="Cart"
+        component={Cart}
+        options={{
+          headerShown: true,
+          headerTitle: 'Keranjang',
+          headerTintColor: colors.white,
+          headerStyle: {
+            backgroundColor: colors.primary
+          }
         }}
       />
 

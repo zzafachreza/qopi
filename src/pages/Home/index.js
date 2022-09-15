@@ -65,7 +65,31 @@ export default function Home({ navigation, route }) {
       <TouchableOpacity onPress={() => navigation.navigate('Product', item)} style={{
         flex: 1,
         marginVertical: 10,
+        position: 'relative'
       }}>
+        {item.diskon > 0 &&
+
+          <View style={{
+            position: 'absolute',
+            right: 20,
+            backgroundColor: colors.secondary,
+            width: 30,
+            height: 30,
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 15,
+
+          }}>
+            <Text
+              style={{
+                fontSize: myDimensi / 3,
+                color: colors.white,
+
+                fontFamily: fonts.primary[600],
+              }}>
+              {item.diskon}%
+            </Text>
+          </View>}
         <Image style={{
           width: '100%',
           height: 150,
@@ -98,6 +122,25 @@ export default function Home({ navigation, route }) {
           <View style={{
             flex: 1,
           }}>
+
+            {item.diskon > 0 &&
+
+              <Text
+                style={{
+                  flex: 1,
+                  fontSize: myDimensi / 3,
+                  color: colors.black,
+                  marginRight: 10,
+                  marginBottom: 5,
+                  textDecorationLine: 'line-through',
+                  textDecorationStyle: 'solid',
+                  fontFamily: fonts.primary.normal,
+                }}>
+                Rp. {new Intl.NumberFormat().format(item.harga_dasar)}
+              </Text>
+
+            }
+
             <Text style={{
               fontFamily: fonts.primary[600],
               fontSize: myDimensi / 2,
@@ -113,7 +156,7 @@ export default function Home({ navigation, route }) {
             <Icon type='ionicon' name='arrow-forward-outline' color={colors.primary} size={myDimensi / 2} />
           </View>
         </View>
-      </TouchableOpacity>
+      </TouchableOpacity >
     )
   }
 
@@ -141,7 +184,7 @@ export default function Home({ navigation, route }) {
             fontSize: myDimensi / 2
           }}>{user.nama_lengkap}</Text></Text>
         </View>
-        <TouchableOpacity style={{
+        <TouchableOpacity onPress={() => navigation.navigate('Cart')} style={{
           marginHorizontal: 10,
           justifyContent: 'center',
           alignItems: 'center'
