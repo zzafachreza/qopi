@@ -21,7 +21,11 @@ import {
   History,
   Account,
   AccountEdit,
-  Cart
+  Cart,
+  Outlet,
+  OutletDetail,
+  CartEdit,
+  Payment
 } from '../pages';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { BottomNavigator } from '../components';
@@ -150,6 +154,59 @@ export default function Router() {
         options={{
           headerShown: true,
           headerTitle: 'Keranjang',
+          headerTintColor: colors.white,
+          headerStyle: {
+            backgroundColor: colors.primary
+          }
+        }}
+      />
+
+      <Stack.Screen
+        name="CartEdit"
+        component={CartEdit}
+        options={{
+          headerShown: true,
+          headerTitle: 'Ubah Keranjang',
+          headerTintColor: colors.white,
+          headerStyle: {
+            backgroundColor: colors.primary
+          }
+        }}
+      />
+
+      <Stack.Screen
+        name="Outlet"
+        component={Outlet}
+        options={{
+          headerShown: true,
+          headerTitle: 'Daftar Outlet',
+          headerTintColor: colors.white,
+          headerStyle: {
+            backgroundColor: colors.primary
+          }
+        }}
+      />
+
+      <Stack.Screen
+        name="OutletDetail"
+        component={OutletDetail}
+        options={{
+          headerShown: true,
+          headerTitle: 'Detail Outlet',
+          headerTintColor: colors.white,
+          headerStyle: {
+            backgroundColor: colors.primary
+          }
+        }}
+      />
+
+
+      <Stack.Screen
+        name="Payment"
+        component={Payment}
+        options={{
+          headerShown: true,
+          headerTitle: 'Pembayaran',
           headerTintColor: colors.white,
           headerStyle: {
             backgroundColor: colors.primary

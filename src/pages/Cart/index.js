@@ -10,23 +10,24 @@ import {
     Linking,
     ActivityIndicator,
     Alert,
+    Keyboard,
+    TextInput,
 } from 'react-native';
 
-import { apiURL, getData, storeData, urlAPI } from '../../utils/localStorage';
+import { apiURL, getData, storeData, urlAPI, urlToken } from '../../utils/localStorage';
 import axios from 'axios';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MyButton, MyInput, MyPicker } from '../../components';
 import { colors } from '../../utils/colors';
 import { TouchableOpacity, Swipeable } from 'react-native-gesture-handler';
-import { fonts, windowHeight, windowWidth } from '../../utils/fonts';
+import { fonts, myDimensi, windowHeight, windowWidth } from '../../utils/fonts';
 import { useIsFocused } from '@react-navigation/native';
-import { Icon } from 'react-native-elements';
 import 'intl';
 import 'intl/locale-data/jsonp/en';
 import { showMessage } from 'react-native-flash-message';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { Modalize } from 'react-native-modalize';
-
+import Icon from 'react-native-vector-icons/FontAwesome5';
 export default function Cart({ navigation, route }) {
     const [user, setUser] = useState({});
     const [data, setData] = useState([]);
@@ -39,6 +40,7 @@ export default function Cart({ navigation, route }) {
     const [itemz, setItem] = useState({});
 
     const modalizeRef = useRef();
+    const [keyboardStatus, setKeyboardStatus] = useState(undefined);
 
     const updateCart = () => {
         console.log(itemz);
@@ -70,21 +72,43 @@ export default function Cart({ navigation, route }) {
 
     useEffect(() => {
         if (isFocused) {
-
             getData('user').then(rx => {
-                console.log(rx)
                 setUser(rx);
                 __getDataBarang(rx.id);
             });
 
         }
+
+        const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+            setKeyboardStatus("Keyboard Shown");
+        });
+        const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+            setKeyboardStatus("Keyboard Hidden");
+
+        });
+
+        return () => {
+            showSubscription.remove();
+            hideSubscription.remove();
+        };
+
     }, [isFocused]);
+    const [total, setTotal] = useState(0);
+
 
     const __getDataBarang = (zz) => {
         axios.post(apiURL + '/v1_cart.php', {
             fid_user: zz
         }).then(x => {
             setData(x.data);
+            console.log('data cart', x.data);
+            let sub = 0;
+            x.data.map((i, key) => {
+                sub += parseFloat(i.total);
+
+            });
+
+            setTotal(sub);
         })
 
     }
@@ -105,73 +129,168 @@ export default function Cart({ navigation, route }) {
 
 
 
-    var sub = 0;
-    var beratTotal = 0;
-    data.map((item, key) => {
-        sub += parseFloat(item.total);
-        beratTotal += parseFloat(item.berat);
-    });
+
 
     const __renderItem = ({ item, index }) => {
+
+        let jumlah = item.qty;
         return (
 
-            <Swipeable >
-                <View style={{
-                    flexDirection: 'row',
-                    backgroundColor: colors.white
-                }}>
-                    <View style={{ padding: 10, }}>
-                        <Image style={{
-                            width: 60,
-                            height: 80,
-                        }} source={{
-                            uri: item.image
-                        }} />
-                    </View>
-                    <View style={{ padding: 10, flex: 1 }}>
-                        <View style={{
-                            flex: 1,
-                        }}>
-                            <Text
-                                style={{
-                                    fontFamily: fonts.primary[600],
-                                    fontSize: windowWidth / 30,
-                                }}>
-                                {item.nama_barang}
-                            </Text>
-                            <Text
-                                style={{
-                                    fontFamily: fonts.primary[200],
-                                    fontSize: windowWidth / 30,
-                                }}>
-                                {item.ukuran}, {item.suhu}, {item.gula}, {item.es}
-                            </Text>
-                        </View>
-
+            <View style={{
+                flexDirection: 'row',
+            }}>
+                <View style={{ padding: 10, }}>
+                    <Image style={{
+                        width: 60,
+                        resizeMode: 'contain',
+                        height: 50,
+                    }} source={{
+                        uri: item.image
+                    }} />
+                </View>
+                <View style={{ padding: 10, flex: 1, borderBottomWidth: 1, borderBottomColor: colors.border_form }}>
+                    <View style={{
+                        flex: 1,
+                    }}>
                         <Text
                             style={{
-
-                                fontFamily: fonts.primary[600],
-                                color: colors.primary,
-                                fontSize: windowWidth / 25,
+                                fontFamily: fonts.secondary[600],
+                                fontSize: myDimensi / 2,
                             }}>
-                            Rp. {new Intl.NumberFormat().format(item.total)}
+                            {item.nama_barang}
+                        </Text>
+                        <Text
+                            style={{
+                                fontFamily: fonts.secondary[400],
+                                fontSize: myDimensi / 2.5,
+                                color: colors.border_label
+                            }}>
+                            {item.ukuran}, {item.suhu} {item.data_topping == '' ? '' : ', ' + item.data_topping} {item.catatan !== '' ? ', ' + item.catatan : ''}
                         </Text>
                     </View>
-                    <View style={{ padding: 10, }}>
-                        <TouchableOpacity
-                            onPress={() => {
-                                setItem(item);
-                                modalizeRef.current.open();
-                            }}
-                            style={{
-                                marginHorizontal: 5,
-                            }}>
-                            <Icon type='ionicon' name='create-outline' color={colors.secondary_base} />
+
+                    <Text
+                        style={{
+
+                            fontFamily: fonts.primary[600],
+                            color: colors.black,
+                            fontSize: myDimensi / 2,
+                        }}>
+                        Rp. {new Intl.NumberFormat().format(item.total)}
+                    </Text>
+                </View>
+                <View style={{ marginRight: 10, borderBottomWidth: 1, borderBottomColor: colors.border_form }}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigation.navigate('CartEdit', item)
+                            console.warn(item)
+                        }}
+                        style={{
+                            width: 25,
+                            alignSelf: 'flex-end',
+                            marginVertical: 5,
+
+
+                        }}>
+                        <Icon name="edit" color={colors.secondary_base} size={myDimensi / 1.4} solid />
+                    </TouchableOpacity>
+
+                    <View style={{
+                        flexDirection: 'row',
+                        paddingRight: 5,
+                    }}>
+                        <TouchableOpacity onPress={() => {
+                            setLoading(true);
+                            console.warn('barang', item.id + item.qty)
+                            axios.post(apiURL + 'v1_cart_update.php', {
+                                api_token: urlToken,
+                                id: item.id,
+                                qty: parseFloat(item.qty) - 1
+                            }).then(res => {
+                                console.log(res.data);
+                                __getDataBarang(user.id);
+                                setLoading(false);
+                            })
+                        }} style={{
+                            flex: 1,
+
+                            backgroundColor: colors.primary,
+                            // borderRadius: 5,
+                            width: 25,
+                            height: 25,
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}>
+                            <Icon name='minus' color={colors.white} />
+                        </TouchableOpacity>
+                        <View style={{
+                            height: 25,
+                            paddingHorizontal: 5,
+                            borderTopWidth: 1,
+                            borderBottomWidth: 1,
+                            borderTopColor: colors.primary,
+                            borderBottomColor: colors.primary,
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}>
+                            <TextInput onChangeText={x => {
+                                let items = [...data];
+                                let item = { ...items[index] };
+                                item.qty = x;
+                                items[index] = item;
+                                console.log(items);
+                                setData(items);
+
+                                if (x > 0) {
+
+                                    axios.post(apiURL + 'v1_cart_update.php', {
+                                        api_token: urlToken,
+                                        id: item.id,
+                                        qty: parseFloat(item.qty)
+                                    }).then(res => {
+                                        console.log(res.data);
+                                        __getDataBarang(user.id);
+                                        setLoading(false);
+                                    })
+
+
+                                }
+
+
+
+                            }} keyboardType='number-pad' value={item.qty} style={{
+                                padding: 0,
+                                textAlign: 'center',
+                                fontFamily: fonts.secondary[600]
+                            }} />
+                        </View>
+                        <TouchableOpacity onPress={() => {
+                            setLoading(true);
+                            console.warn('barang', item.id + item.qty)
+                            axios.post(apiURL + 'v1_cart_update.php', {
+                                api_token: urlToken,
+                                id: item.id,
+                                qty: parseFloat(item.qty) + 1
+                            }).then(res => {
+                                console.log(res.data);
+                                __getDataBarang(user.id);
+                                setLoading(false);
+                            })
+                        }} style={{
+                            flex: 1,
+                            backgroundColor: colors.primary,
+                            // borderRadius: 5,
+                            width: 25,
+                            height: 25,
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}>
+                            <Icon name='plus' color={colors.white} />
                         </TouchableOpacity>
                     </View>
                 </View>
-            </Swipeable>
+            </View>
+
 
         );
     };
@@ -184,123 +303,13 @@ export default function Cart({ navigation, route }) {
         quality: 0.3,
     };
 
-    const getCamera = xyz => {
-        launchCamera(options, response => {
-            // console.log('Response = ', response);
-            if (response.didCancel) {
-                console.log('User cancelled image picker');
-            } else if (response.error) {
-                console.log('Image Picker Error: ', response.error);
-            } else {
-                let source = { uri: response.uri };
-                switch (xyz) {
-                    case 1:
-                        setfoto(`data:${response.type};base64, ${response.base64}`)
-                        break;
-                }
-            }
-        });
-    };
 
-    const getGallery = xyz => {
-        launchImageLibrary(options, response => {
-            console.log('All Response = ', response);
-
-            console.log('Ukuran = ', response.fileSize);
-            if (response.didCancel) {
-                console.log('User cancelled image picker');
-            } else if (response.error) {
-                console.log('Image Picker Error: ', response.error);
-            } else {
-                if (response.fileSize <= 200000) {
-                    let source = { uri: response.uri };
-                    switch (xyz) {
-                        case 1:
-                            setfoto(`data:${response.type};base64, ${response.base64}`)
-                            break;
-                    }
-                } else {
-                    showMessage({
-                        message: 'Ukuran Foto Terlalu Besar Max 500 KB',
-                        type: 'danger',
-                    });
-                }
-            }
-        });
-    };
-
-    const UploadFoto = ({ onPress1, onPress2, label, foto }) => {
-        return (
-            <View
-                style={{
-                    padding: 10,
-                    backgroundColor: colors.white,
-                    marginVertical: 10,
-                    borderWidth: 1,
-                    borderRadius: 10,
-                    borderColor: colors.border,
-                    elevation: 2,
-                }}>
-                <Text
-                    style={{
-                        fontFamily: fonts.secondary[600],
-                        color: colors.black,
-                    }}>
-                    {label}
-                </Text>
-
-                <View
-                    style={{
-                        flexDirection: 'row',
-                    }}>
-                    <View style={{
-                        flex: 2
-                    }}>
-                        <Image
-                            source={{
-                                uri: foto,
-                            }}
-                            style={{
-                                width: '100%',
-                                aspectRatio: 3,
-                                resizeMode: 'contain',
-                            }}
-                        />
-                    </View>
-                    <View
-                        style={{
-                            flex: 1,
-                            paddingRight: 5,
-                        }}>
-                        <MyButton
-                            onPress={onPress1}
-                            colorText={colors.white}
-                            title="KAMERA"
-                            warna={colors.primary}
-                        />
-                    </View>
-                    <View
-                        style={{
-                            flex: 1,
-                            paddingLeft: 5,
-                        }}>
-                        <MyButton
-                            onPress={onPress2}
-                            title="GALLERY"
-                            colorText={colors.white}
-                            warna={colors.secondary}
-                        />
-                    </View>
-
-                </View>
-            </View>
-        );
-    };
 
     return (
         <SafeAreaView
             style={{
                 flex: 1,
+                backgroundColor: colors.white
                 // padding: 10,
             }}>
 
@@ -446,107 +455,85 @@ export default function Cart({ navigation, route }) {
                 <View
                     style={{
                         flexDirection: 'row',
-                        justifyContent: 'space-between',
                     }}>
                     <View
                         style={{
                             flex: 1,
+                            padding: 10,
                             backgroundColor: colors.white,
                             justifyContent: 'center',
                             alignItems: 'flex-start',
                         }}>
+
                         <Text
                             style={{
-                                fontSize: windowWidth / 20,
+                                fontSize: myDimensi / 2.3,
+                                fontFamily: fonts.secondary[400],
+                                color: colors.border_label,
+                                left: 10,
+                            }}>
+                            Total
+
+                        </Text>
+                        <Text
+                            style={{
+                                fontSize: myDimensi / 2,
                                 fontFamily: fonts.secondary[600],
                                 color: colors.black,
                                 left: 10,
                             }}>
-                            Rp. {new Intl.NumberFormat().format(sub)}
+                            Rp. {new Intl.NumberFormat().format(total)}
 
                         </Text>
-                        <Text
-                            style={{
-                                fontSize: windowWidth / 20,
-                                fontFamily: fonts.secondary[400],
-                                color: colors.black,
-                                left: 10,
-                            }}>
-                            {new Intl.NumberFormat().format(beratTotal)} gr
-                        </Text>
-
                     </View>
-                    <TouchableOpacity
-                        onPress={() => {
-
-                            setLoading(true);
-
+                    <View style={{
+                        flex: 1,
+                        padding: 10,
+                        backgroundColor: colors.white
+                    }}>
+                        <MyButton warna={colors.primary} title="Pilih Pembayaran" onPress={() => {
+                            setLoading(true)
                             getData('user').then(res => {
 
                                 const dd = {
                                     fid_user: res.id,
-                                    harga_total: sub,
-                                    berat_total: beratTotal
-                                }
+                                    fid_outlet: res.fid_outlet,
+                                    harga_total: total,
 
+                                }
+                                console.log(total)
                                 setTimeout(() => {
                                     setLoading(false);
-                                    navigation.navigate('Checkout', dd)
-                                }, 1500)
-
+                                    navigation.navigate('Payment', dd)
+                                }, 1200)
 
                                 console.log(dd);
-                                // axios.post(urlAPI + '/1add_transaksi.php', dd).then(rr => {
-                                //   console.log(rr.data);
 
-                                //   setTimeout(() => {
-                                //     setLoading(false);
-                                //     showMessage({
-                                //       type: 'success',
-                                //       message: 'Transaksi kamu berhasil dikirim'
-                                //     })
-                                //     navigation.replace('ListData')
-                                //   }, 1500)
-
-
-                                // })
 
 
                             });
 
+                        }} />
+                    </View>
 
-
-                        }}
-                        style={{
-
-                            backgroundColor: colors.primary,
-                            padding: 15,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            flexDirection: 'row'
-                        }}>
-                        <Icon type='ionicon' name="open-outline" color={colors.white} size={windowWidth / 20} />
-                        <Text
-                            style={{
-                                fontSize: windowWidth / 20,
-                                left: 5,
-                                fontFamily: fonts.secondary[600],
-                                color: colors.white,
-
-                            }}>
-                            CHECKOUT
-                        </Text>
-                    </TouchableOpacity>
 
 
                 </View>}
 
 
             {loading && <View style={{
-                padding: 10
+                padding: 10,
+                flex: 1,
+                width: windowWidth,
+                height: windowHeight,
+                justifyContent: 'center',
+                alignItems: 'center',
+                position: 'absolute',
+                opacity: 0.5,
+                backgroundColor: colors.primary,
             }}><ActivityIndicator size="large" color={colors.primary} /></View>}
 
-        </SafeAreaView>
+        </SafeAreaView >
     );
 }
 

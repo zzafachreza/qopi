@@ -21,6 +21,8 @@ export default function Home({ navigation, route }) {
       if (!u) {
         setUser({
           nama_lengkap: 'Qopi untuk semua',
+          nama_outlet: 'Silahkan pilih',
+          alamat_outlet: '',
         })
       } else {
         setUser(u)
@@ -289,7 +291,16 @@ export default function Home({ navigation, route }) {
         </View> */}
 
         {/* Lokasi Outlite */}
-        <View style={{
+        <TouchableOpacity onPress={() => {
+          if (user.id == null) {
+
+            navigation.navigate('Login')
+
+          } else {
+
+            navigation.navigate('Outlet')
+          }
+        }} style={{
           flexDirection: 'row',
           borderRadius: 15,
           paddingVertical: 5,
@@ -329,7 +340,12 @@ export default function Home({ navigation, route }) {
               fontFamily: fonts.primary[600],
               fontSize: myDimensi / 2.3,
               color: colors.black,
-            }}>Silahkan pilih</Text>
+            }}>{user.nama_outlet}</Text>
+            {/* <Text style={{
+              fontFamily: fonts.primary[400],
+              fontSize: myDimensi / 2.5,
+              color: colors.black,
+            }}>{user.alamat_outlet}</Text> */}
 
           </View>
           <View style={{
@@ -342,7 +358,7 @@ export default function Home({ navigation, route }) {
 
 
           </View>
-        </View>
+        </TouchableOpacity>
 
         {/* banner */}
         <TouchableOpacity activeOpacity={0.8} style={{

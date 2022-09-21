@@ -12,6 +12,11 @@ import Wish from './Wish';
 import Account from './Account';
 import AccountEdit from './AccountEdit';
 import Cart from './Cart';
+import CartEdit from './CartEdit';
+import Outlet from './Outlet';
+import OutletDetail from './OutletDetail';
+import Payment from './Payment';
+
 
 
 
@@ -32,6 +37,10 @@ export {
   Wish,
   Account,
   AccountEdit,
-  Cart
+  Cart,
+  CartEdit,
+  Outlet,
+  OutletDetail,
+  Payment
 
 };

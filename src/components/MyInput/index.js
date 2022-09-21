@@ -18,6 +18,7 @@ export default function MyInput({
   nolabel = false,
   autoFocus,
   multiline,
+  onSubmitEditing,
   label2,
   styleLabel,
   colorIcon = colors.primary,
@@ -43,7 +44,7 @@ export default function MyInput({
         }}>
           <Icon type='ionicon' name={iconname} size={myDimensi / 1.6} color={colors.primary} />
         </View>
-        <TextInput autoFocus={autoFocus} autoCapitalize='none' value={value} multiline={multiline} onChangeText={onChangeText}
+        <TextInput onSubmitEditing={onSubmitEditing} autoFocus={autoFocus} autoCapitalize='none' value={value} multiline={multiline} onChangeText={onChangeText}
           keyboardType={keyboardType}
           style={{
             borderWidth: 1,

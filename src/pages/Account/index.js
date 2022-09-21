@@ -7,6 +7,7 @@ import {
     Image,
     Linking,
     Alert,
+    ActivityIndicator,
 } from 'react-native';
 import { windowWidth, fonts } from '../../utils/fonts';
 import { getData, storeData, urlAPI, urlApp, urlAvatar } from '../../utils/localStorage';
@@ -22,6 +23,7 @@ export default function Account({ navigation, route }) {
     const [com, setCom] = useState({});
     const isFocused = useIsFocused();
     const [wa, setWA] = useState('');
+    const [open, setOpen] = useState(false);
 
 
 
@@ -29,8 +31,9 @@ export default function Account({ navigation, route }) {
 
         getData('user').then(res => {
             if (!res) {
-                navigation.replace('Register');
+                navigation.replace('Login');
             } else {
+                setOpen(true);
                 setUser(res);
             }
             console.error(res);
@@ -88,56 +91,66 @@ export default function Account({ navigation, route }) {
             padding: 10
         }}>
 
-            <View style={{
+            {!open && <View style={{
+                flex: 1,
                 justifyContent: 'center',
-                alignItems: 'center',
+                alignItems: 'center'
             }}>
-                <Image source={{
-                    uri: user.foto_user == '' ? 'https://zavalabs.com/nogambar.jpg' : urlAvatar + user.foto_user,
+                <ActivityIndicator size="large" color={colors.primary} />
+            </View>}
 
-                }} style={{
-                    width: windowWidth / 2.5,
-                    height: windowWidth / 2.5,
-                    borderRadius: (windowWidth / 2.5) / 2
-                }} />
-            </View>
+            {open && <>
 
-            {/* data detail */}
-            <View style={{ padding: 10, flex: 1 }}>
-                <MyList label="Nama Lengkap" value={user.nama_lengkap} />
-                <MyList label="Email" value={user.email} />
-                <MyList label="Telepon / Whatsapp" value={user.telepon} />
-                <MyList label="Alamat" value={user.alamat} />
-            </View>
-            <View style={{ padding: 10, flexDirection: 'row', justifyContent: 'space-around' }}>
                 <View style={{
-                    flex: 1,
-                    margin: 5
+                    justifyContent: 'center',
+                    alignItems: 'center',
                 }}>
-                    <MyButton
-                        onPress={() => navigation.navigate('AccountEdit', user)}
-                        title="Edit Profil"
-                        colorText={colors.white}
-                        iconColor={colors.white}
-                        warna={colors.primary}
-                        Icons="create-outline"
-                    />
-                </View>
-                <View style={{
-                    flex: 1,
-                    margin: 5
-                }}>
-                    <MyButton
-                        onPress={btnKeluar}
-                        title="Keluar"
-                        colorText={colors.white}
-                        iconColor={colors.white}
-                        warna={colors.black}
-                        Icons="log-out-outline"
-                    />
-                </View>
+                    <Image source={{
+                        uri: user.foto_user == '' ? 'https://zavalabs.com/nogambar.jpg' : urlAvatar + user.foto_user,
 
-            </View>
+                    }} style={{
+                        width: windowWidth / 2.5,
+                        height: windowWidth / 2.5,
+                        borderRadius: (windowWidth / 2.5) / 2
+                    }} />
+                </View>
+                {/* data detail */}
+                <View style={{ padding: 10, flex: 1 }}>
+                    <MyList label="Nama Lengkap" value={user.nama_lengkap} />
+                    <MyList label="Email" value={user.email} />
+                    <MyList label="Telepon / Whatsapp" value={user.telepon} />
+                    <MyList label="Alamat" value={user.alamat} />
+                </View>
+                <View style={{ padding: 10, flexDirection: 'row', justifyContent: 'space-around' }}>
+                    <View style={{
+                        flex: 1,
+                        margin: 5
+                    }}>
+                        <MyButton
+                            onPress={() => navigation.navigate('AccountEdit', user)}
+                            title="Edit Profil"
+                            colorText={colors.white}
+                            iconColor={colors.white}
+                            warna={colors.primary}
+                            Icons="create-outline"
+                        />
+                    </View>
+                    <View style={{
+                        flex: 1,
+                        margin: 5
+                    }}>
+                        <MyButton
+                            onPress={btnKeluar}
+                            title="Keluar"
+                            colorText={colors.white}
+                            iconColor={colors.white}
+                            warna={colors.black}
+                            Icons="log-out-outline"
+                        />
+                    </View>
+
+                </View>
+            </>}
         </SafeAreaView >
     );
 }
