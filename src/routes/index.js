@@ -205,7 +205,7 @@ export default function Router() {
         name="Payment"
         component={Payment}
         options={{
-          headerShown: true,
+          headerShown: false,
           headerTitle: 'Pembayaran',
           headerTintColor: colors.white,
           headerStyle: {

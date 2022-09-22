@@ -9,6 +9,9 @@ import 'intl';
 import 'intl/locale-data/jsonp/en';
 import MyCarouser from '../../components/MyCarouser';
 import { ImageBackground } from 'react-native';
+import messaging from '@react-native-firebase/messaging';
+import PushNotification from 'react-native-push-notification';
+
 export default function Home({ navigation, route }) {
 
   const [user, setUser] = useState({});
@@ -17,6 +20,20 @@ export default function Home({ navigation, route }) {
   const [best, setBest] = useState({});
 
   useEffect(() => {
+
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      const json = JSON.stringify(remoteMessage);
+      const obj = JSON.parse(json);
+      console.log(obj);
+      PushNotification.localNotification({
+        channelId: 'qopi', // (required) channelId, if the channel doesn't exist, notification will not trigger.
+        title: obj.notification.title, // (optional)
+        message: obj.notification.body, // (required)
+      });
+    });
+    return unsubscribe;
+
+
     getData('user').then(u => {
       if (!u) {
         setUser({
@@ -25,13 +42,30 @@ export default function Home({ navigation, route }) {
           alamat_outlet: '',
         })
       } else {
-        setUser(u)
+        setUser(u);
+        UpdateToken(u.id);
       }
     });
     getProduk();
     getTerbaik();
     getKategori();
+
   }, []);
+
+  const UpdateToken = (id) => {
+
+    getData('token').then(res => {
+      console.log('tokenSAYA', res.token);
+      axios.post(apiURL + 'v1_token_update.php', {
+        api_token: urlToken,
+        id: id,
+        token: res.token
+      }).then(zvl => {
+        console.log('UPDATE TOKEN', zvl.data)
+      })
+    })
+
+  }
 
 
   const getKategori = () => {
