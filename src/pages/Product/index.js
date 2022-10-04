@@ -1,4 +1,4 @@
-import { FlatList, Image, SafeAreaView, ScrollView, StatusBar, StyleSheet, Animated, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, Image, SafeAreaView, ScrollView, StatusBar, StyleSheet, Animated, Text, TouchableOpacity, View, TouchableWithoutFeedback } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { colors } from '../../utils/colors'
 import { apiURL, getData, urlToken } from '../../utils/localStorage';
@@ -10,6 +10,7 @@ import 'intl/locale-data/jsonp/en';
 import { ImageBackground } from 'react-native';
 import { MyInput } from '../../components';
 import LottieView from 'lottie-react-native'
+import { showMessage } from 'react-native-flash-message';
 
 
 export default function Product({ navigation, route }) {
@@ -128,7 +129,11 @@ export default function Product({ navigation, route }) {
                 <ImageBackground source={require('../../assets/banner_product.png')} style={{
                     width: windowWidth,
                     height: 200,
+                    position: 'relative'
                 }}>
+
+
+
                     <Image style={{
                         width: '100%',
                         height: 200,
@@ -136,6 +141,7 @@ export default function Product({ navigation, route }) {
                     }} source={{
                         uri: item.image
                     }} />
+
                 </ImageBackground>
                 <View style={{
                     marginVertical: 5,
@@ -169,6 +175,64 @@ export default function Product({ navigation, route }) {
                             color: colors.primary
                         }}>Rp. {new Intl.NumberFormat().format(item.harga_barang)}</Text>
                     </View>
+                    <TouchableOpacity style={{
+                        marginHorizontal: 5,
+                        // position: 'absolute'
+                    }} onPress={() => {
+
+                        getData('user').then(user => {
+                            if (!user) {
+                                console.log('harus login');
+                                navigation.replace('Login')
+                            } else {
+
+                                // console.log(barang);
+                                // let kirim = item.id;
+                                // kirim.fid_user = user.id;
+                                // kirim.api_token = urlToken;
+
+
+
+                                // console.log(kirim);
+
+                                // setLoading(true);
+
+                                setTimeout(() => {
+
+                                    axios.post(apiURL + 'v1_favorit_add.php', {
+                                        fid_user: user.id,
+                                        api_token: urlToken,
+                                        fid_barang: item.id
+                                    }).then(res => {
+                                        console.log(res.data);
+                                        setLoading(false);
+
+                                        if (res.data.status === 404) {
+                                            showMessage({
+                                                type: 'danger',
+                                                message: res.data.message
+                                            })
+                                        } else if (res.data.status === 200) {
+
+                                            showMessage({
+                                                type: 'success',
+                                                message: res.data.message
+                                            })
+
+                                        }
+                                    })
+
+                                }, 1200)
+
+
+
+                            }
+                        })
+                    }}>
+
+                        <Icon type='ionicon' name='heart' color={colors.danger} size={myDimensi * 1.2} />
+
+                    </TouchableOpacity>
                 </View>
 
                 {/* JUmlah */}
@@ -593,7 +657,7 @@ export default function Product({ navigation, route }) {
 
                             console.log(kirim);
 
-                            // setLoading(true);
+                            setLoading(true);
 
                             setTimeout(() => {
 
@@ -601,16 +665,16 @@ export default function Product({ navigation, route }) {
                                     console.log(res.data);
                                     setLoading(false);
 
-                                    // if (res.data.status === 404) {
-                                    //     showMessage({
-                                    //         type: 'danger',
-                                    //         message: res.data.message
-                                    //     })
-                                    // } else if (res.data.status === 200) {
-                                    //     storeData('user', res.data);
-                                    //     navigation.replace('MainApp');
+                                    if (res.data.status === 404) {
+                                        showMessage({
+                                            type: 'danger',
+                                            message: res.data.message
+                                        })
+                                    } else if (res.data.status === 200) {
 
-                                    // }
+                                        navigation.replace('MainApp');
+
+                                    }
                                 })
 
                             }, 1200)

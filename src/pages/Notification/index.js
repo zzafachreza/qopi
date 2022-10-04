@@ -28,7 +28,7 @@ import { showMessage } from 'react-native-flash-message';
 import { Modalize } from 'react-native-modalize';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
-export default function Wish({ navigation }) {
+export default function History({ navigation }) {
     const isFocused = useIsFocused();
     const [user, setUser] = useState({});
 
@@ -47,7 +47,7 @@ export default function Wish({ navigation }) {
 
 
     const __getTransaction = (x) => {
-        axios.post(apiURL + 'v1_favorit.php', {
+        axios.post(apiURL + 'v1_notification.php', {
             fid_user: x,
             api_token: urlToken
         }).then(res => {
@@ -57,13 +57,13 @@ export default function Wish({ navigation }) {
     }
 
     const hanldeHapus = (x, fid_user) => {
-        axios.post(apiURL + 'v1_favorit_delete.php', {
-            id_favorit: x,
+        axios.post(apiURL + 'v1_notification_delete.php', {
+            id_info: x,
             api_token: urlToken
         }).then(res => {
             showMessage({
                 type: 'success',
-                message: 'Favorit berhasil dihapus'
+                message: 'Pemberitahuan berhasil dihapus'
             })
             console.warn(res.data);
             __getTransaction(fid_user);
@@ -95,48 +95,30 @@ export default function Wish({ navigation }) {
                 );
             }}>
                 <View style={{
+                    padding: 10,
                     borderBottomWidth: 1,
                     borderBottomColor: colors.border_form,
                     margin: 5,
                     borderRadius: 5,
                     flexDirection: 'row'
                 }}>
-                    <View style={{ padding: 10, }}>
-                        <Image style={{
-                            width: 60,
-                            resizeMode: 'contain',
-                            height: 50,
-                        }} source={{
-                            uri: item.image
-                        }} />
-                    </View>
                     <View style={{
                         flex: 1,
-                        justifyContent: 'center',
                     }}>
                         <Text style={{
                             fontFamily: fonts.secondary[600],
                             fontSize: 14
-                        }}>{item.nama_barang}</Text>
+                        }}>{item.judul}</Text>
                         <Text style={{
                             fontFamily: fonts.secondary[400],
                             fontSize: 12
-                        }}>{item.keterangan_barang}</Text>
+                        }}>{item.isi}</Text>
                         <Text style={{
                             fontFamily: fonts.secondary[400],
                             fontSize: 10,
                             color: colors.primary,
-                        }}>Rp. {new Intl.NumberFormat().format(item.harga_barang)}</Text>
+                        }}>{item.tanggal}</Text>
                     </View>
-                    <TouchableOpacity onPress={() => navigation.navigate('Product', item)} style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        flex: 1,
-                        padding: 20,
-                        backgroundColor: colors.primary,
-                    }}>
-                        <Icon name='shopping-cart' size={myDimensi / 1.5} color={colors.white} />
-                    </TouchableOpacity>
 
                 </View>
             </Swipeable>

@@ -25,7 +25,6 @@ import { useIsFocused } from '@react-navigation/native';
 import 'intl';
 import 'intl/locale-data/jsonp/en';
 import { showMessage } from 'react-native-flash-message';
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { Modalize } from 'react-native-modalize';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 export default function Cart({ navigation, route }) {
@@ -107,22 +106,23 @@ export default function Cart({ navigation, route }) {
                 sub += parseFloat(i.total);
 
             });
-
             setTotal(sub);
         })
 
     }
 
     const hanldeHapus = (x) => {
-        axios.post(apiURL + '/cart_hapus.php', {
-            id_cart: x
-        }).then(x => {
+        axios.post(apiURL + '/v1_cart_delete.php', {
+            id_cart: x,
+            api_token: urlToken
+        }).then(xx => {
+
+            console.log(xx.data);
             getData('user').then(tkn => {
                 __getDataBarang(tkn.id);
+                setLoading(false);
             });
-            getData('cart').then(xx => {
-                storeData('cart', xx - 1)
-            });
+
         })
     };
 
@@ -200,17 +200,24 @@ export default function Cart({ navigation, route }) {
                         paddingRight: 5,
                     }}>
                         <TouchableOpacity onPress={() => {
-                            setLoading(true);
-                            console.warn('barang', item.id + item.qty)
-                            axios.post(apiURL + 'v1_cart_update.php', {
-                                api_token: urlToken,
-                                id: item.id,
-                                qty: parseFloat(item.qty) - 1
-                            }).then(res => {
-                                console.log(res.data);
-                                __getDataBarang(user.id);
-                                setLoading(false);
-                            })
+
+                            if (item.qty == 1) {
+                                setLoading(true);
+                                hanldeHapus(item.id);
+                            } else {
+                                setLoading(true);
+                                console.warn('barang', item.id + item.qty)
+                                axios.post(apiURL + 'v1_cart_update.php', {
+                                    api_token: urlToken,
+                                    id: item.id,
+                                    qty: parseFloat(item.qty) - 1
+                                }).then(res => {
+                                    console.log(res.data);
+                                    __getDataBarang(user.id);
+                                    setLoading(false);
+                                })
+                            }
+
                         }} style={{
                             flex: 1,
 
@@ -371,7 +378,8 @@ export default function Cart({ navigation, route }) {
                                 <TouchableOpacity
                                     onPress={() => {
                                         itemz.qty == 1
-                                            ? showMessage({
+                                            ?
+                                            showMessage({
                                                 type: 'danger',
                                                 message: 'Minimal pembelian 1',
                                             })

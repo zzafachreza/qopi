@@ -16,6 +16,15 @@ import CartEdit from './CartEdit';
 import Outlet from './Outlet';
 import OutletDetail from './OutletDetail';
 import Payment from './Payment';
+import PaymentSuccess from './PaymentSuccess';
+import Transaction from './Transaction';
+import TransactionDetail from './TransactionDetail';
+import Notification from './Notification';
+import ProductAll from './ProductAll';
+import ProductCategory from './ProductCategory';
+
+
+
 
 
 
@@ -41,6 +50,12 @@ export {
   CartEdit,
   Outlet,
   OutletDetail,
-  Payment
+  Payment,
+  PaymentSuccess,
+  Transaction,
+  TransactionDetail,
+  Notification,
+  ProductAll,
+  ProductCategory
 
 };

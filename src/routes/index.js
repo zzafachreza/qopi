@@ -25,11 +25,18 @@ import {
   Outlet,
   OutletDetail,
   CartEdit,
-  Payment
+  Payment,
+  Transaction,
+  TransactionDetail,
+  PaymentSuccess,
+  Notification,
+  ProductAll,
+  ProductCategory
 } from '../pages';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { BottomNavigator } from '../components';
 import { colors } from '../utils/colors';
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -44,6 +51,7 @@ const MainApp = () => {
     </Tab.Navigator>
   );
 };
+
 
 
 export default function Router() {
@@ -211,6 +219,83 @@ export default function Router() {
           headerStyle: {
             backgroundColor: colors.primary
           }
+        }}
+      />
+
+
+      <Stack.Screen
+        name="PaymentSuccess"
+        component={PaymentSuccess}
+        options={{
+          headerShown: false,
+          headerTitle: 'Pembayaran',
+          headerTintColor: colors.white,
+          headerStyle: {
+            backgroundColor: colors.primary
+          }
+        }}
+      />
+
+
+
+      <Stack.Screen
+        name="Transaction"
+        component={Transaction}
+        options={{
+          headerShown: false,
+
+        }}
+      />
+
+      <Stack.Screen
+        name="TransactionDetail"
+        component={TransactionDetail}
+        options={{
+          headerShown: false,
+
+        }}
+      />
+
+      <Stack.Screen
+        name="Notification"
+        component={Notification}
+        options={{
+          headerShown: true,
+          headerTitle: 'Pemberitahuan',
+          headerStyle: {
+            backgroundColor: colors.primary,
+          },
+          headerTintColor: colors.white
+
+        }}
+      />
+
+      <Stack.Screen
+        name="ProductAll"
+        component={ProductAll}
+        options={{
+          headerShown: false,
+          headerTitle: 'Pemberitahuan',
+          headerStyle: {
+            backgroundColor: colors.primary,
+          },
+          headerTintColor: colors.white
+
+        }}
+      />
+
+
+      <Stack.Screen
+        name="ProductCategory"
+        component={ProductCategory}
+        options={{
+          headerShown: false,
+          headerTitle: 'Pemberitahuan',
+          headerStyle: {
+            backgroundColor: colors.primary,
+          },
+          headerTintColor: colors.white
+
         }}
       />
 

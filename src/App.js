@@ -8,14 +8,14 @@ import { colors } from './utils/colors';
 import Toast from 'react-native-toast-message';
 import PushNotification from 'react-native-push-notification';
 import { storeData } from './utils/localStorage';
-
+import { ActivityIndicator } from 'react-native';
 export default function App() {
   LogBox.ignoreAllLogs();
 
   PushNotification.createChannel(
     {
-      channelId: 'qopi', // (required)
-      channelName: 'qopi', // (required)
+      channelId: 'qpcoffee', // (required)
+      channelName: 'qpcoffee', // (required)
       channelDescription: 'A channel to categorise your notifications', // (optional) default: undefined.
       playSound: true, // (optional) default: true
       soundName: 'default', // (optional) See `soundName` parameter of `localNotification` function
@@ -72,8 +72,35 @@ export default function App() {
     requestPermissions: true,
   });
 
+  const linking = {
+    prefixes: ['qpcoffee://'],
+    config: {
+      initialRouteName: 'MainApp',
+      screens: {
+        MainApp: {
+          path: 'home'
+        },
+        TransactionDetail: {
+          path: 'details/:inv'
+        },
+        History: {
+          path: 'transaction/'
+        },
+        Cart: {
+          path: 'cart/'
+        },
+        PaymentSuccess: {
+          path: 'paysuccess/'
+        }
+      }
+    }
+  };
+
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      linking={linking}
+      fallback={<ActivityIndicator color={colors.primary} size="large" />}
+    >
       <StatusBar backgroundColor={colors.primary} barStyle="light-content" />
       <Router />
       <FlashMessage position="bottom" />

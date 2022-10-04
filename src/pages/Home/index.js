@@ -1,4 +1,4 @@
-import { FlatList, Image, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, Image, Linking, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { colors } from '../../utils/colors'
 import { apiURL, getData, urlToken } from '../../utils/localStorage';
@@ -11,14 +11,15 @@ import MyCarouser from '../../components/MyCarouser';
 import { ImageBackground } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import PushNotification from 'react-native-push-notification';
-
+import { useIsFocused } from '@react-navigation/native';
 export default function Home({ navigation, route }) {
 
   const [user, setUser] = useState({});
   const [kategori, setKategori] = useState([]);
   const [produk, setProduk] = useState([]);
   const [best, setBest] = useState({});
-
+  const [cart, setCart] = useState(0);
+  const isFocused = useIsFocused();
   useEffect(() => {
 
     const unsubscribe = messaging().onMessage(async remoteMessage => {
@@ -26,12 +27,15 @@ export default function Home({ navigation, route }) {
       const obj = JSON.parse(json);
       console.log(obj);
       PushNotification.localNotification({
-        channelId: 'qopi', // (required) channelId, if the channel doesn't exist, notification will not trigger.
+        channelId: 'qpcoffee', // (required) channelId, if the channel doesn't exist, notification will not trigger.
         title: obj.notification.title, // (optional)
         message: obj.notification.body, // (required)
       });
+      alert(obj.notification.body);
+      // navigation.navigate('PaymentSuccess');
     });
-    return unsubscribe;
+
+
 
 
     getData('user').then(u => {
@@ -44,18 +48,39 @@ export default function Home({ navigation, route }) {
       } else {
         setUser(u);
         UpdateToken(u.id);
+        if (isFocused) {
+          UpdateCart(u.id);
+        }
       }
     });
     getProduk();
     getTerbaik();
     getKategori();
 
-  }, []);
+    return unsubscribe;
 
+
+
+  }, [isFocused]);
+
+
+  const UpdateCart = (id) => {
+    axios.post(apiURL + 'v1_cart_total.php', {
+      api_token: urlToken,
+      fid_user: id
+    }).then(zz => {
+      // console.log('cart kamu', zz.data);
+      setCart(zz.data);
+    })
+  }
   const UpdateToken = (id) => {
 
     getData('token').then(res => {
-      console.log('tokenSAYA', res.token);
+      // console.log('tokenSAYA', res.token);
+
+
+
+
       axios.post(apiURL + 'v1_token_update.php', {
         api_token: urlToken,
         id: id,
@@ -77,11 +102,12 @@ export default function Home({ navigation, route }) {
   }
 
 
+
   const getProduk = () => {
     axios.post(apiURL + 'v1_produk.php', {
       api_token: urlToken,
     }).then(res => {
-      console.log(res.data);
+      // console.log(res.data);
       setProduk(res.data);
     })
   }
@@ -91,7 +117,7 @@ export default function Home({ navigation, route }) {
     axios.post(apiURL + 'v1_terbaik.php', {
       api_token: urlToken,
     }).then(res => {
-      console.log('terbaik', res.data);
+      // console.log('terbaik', res.data);
       setBest(res.data);
     })
   }
@@ -222,16 +248,37 @@ export default function Home({ navigation, route }) {
         </View>
         <TouchableOpacity onPress={() => navigation.navigate('Cart')} style={{
           marginHorizontal: 10,
+          padding: 5,
           justifyContent: 'center',
-          alignItems: 'center'
+          alignItems: 'center',
+          position: 'relative'
         }}>
           <Image source={require('../../assets/cart.png')} style={{
             width: 24,
             height: 24,
           }} />
+
+          {cart > 0 &&
+
+            <View style={{
+              position: 'absolute',
+              backgroundColor: colors.secondary,
+              width: 15,
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: 7.5,
+              height: 15,
+              top: 0,
+              right: 0,
+            }}><Text style={{
+
+              fontSize: 12,
+            }}>{cart}</Text></View>
+          }
+
         </TouchableOpacity>
 
-        <TouchableOpacity style={{
+        <TouchableOpacity onPress={() => navigation.navigate('Notification')} style={{
           marginHorizontal: 15,
           justifyContent: 'center',
           alignItems: 'center'
@@ -242,7 +289,15 @@ export default function Home({ navigation, route }) {
           }} />
         </TouchableOpacity>
 
-        <TouchableOpacity style={{
+        <TouchableOpacity onPress={() => {
+
+
+          PushNotification.localNotification({
+            channelId: 'qpcoffee', // (required) channelId, if the channel doesn't exist, notification will not trigger.
+            title: 'test', // (optional)
+            message: 'test112312', // (required)
+          });
+        }} style={{
           marginHorizontal: 15,
         }}>
           <Image source={require('../../assets/logo.png')} style={{
@@ -395,7 +450,7 @@ export default function Home({ navigation, route }) {
         </TouchableOpacity>
 
         {/* banner */}
-        <TouchableOpacity activeOpacity={0.8} style={{
+        <TouchableOpacity onPress={() => navigation.navigate('Product', best)} activeOpacity={0.8} style={{
           padding: 10,
           position: 'relative'
         }}>
@@ -470,7 +525,10 @@ export default function Home({ navigation, route }) {
           }}>
             {kategori.map(i => {
               return (
-                <TouchableOpacity style={{
+                <TouchableOpacity onPress={() => navigation.navigate('ProductCategory', {
+                  fid_kategori: i.id,
+                  nama_kategori: i.nama_kategori
+                })} style={{
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}>
@@ -526,7 +584,7 @@ export default function Home({ navigation, route }) {
               }}>Best Seller</Text>
 
             </View>
-            <View style={{
+            <TouchableOpacity onPress={() => navigation.navigate('ProductAll')} style={{
 
             }}>
               <Text style={{
@@ -538,7 +596,7 @@ export default function Home({ navigation, route }) {
 
 
 
-            </View>
+            </TouchableOpacity>
           </View>
 
           {/* list data */}
