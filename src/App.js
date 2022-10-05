@@ -99,7 +99,7 @@ export default function App() {
   return (
     <NavigationContainer
       linking={linking}
-      fallback={<ActivityIndicator color={colors.primary} size="large" />}
+
     >
       <StatusBar backgroundColor={colors.primary} barStyle="light-content" />
       <Router />
