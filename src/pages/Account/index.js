@@ -29,18 +29,20 @@ export default function Account({ navigation, route }) {
 
     useEffect(() => {
 
-        getData('user').then(res => {
-            if (!res) {
-                navigation.replace('Login');
-            } else {
+
+        if (isFocused) {
+            getData('user').then(res => {
+
                 setOpen(true);
                 setUser(res);
-            }
-            console.error(res);
-        });
+
+            });
+        }
 
 
-    }, []);
+
+
+    }, [isFocused]);
 
     const btnKeluar = () => {
         Alert.alert('Qopi untuk semua', 'Apakah kamu yakin akan keluar ?', [

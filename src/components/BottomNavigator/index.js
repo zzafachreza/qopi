@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { colors } from '../../utils/colors';
+import { getData } from '../../utils/localStorage';
 
 export default function BottomNavigator({ state, descriptors, navigation }) {
   const focusedOptions = descriptors[state.routes[state.index].key].options;
@@ -79,11 +80,17 @@ export default function BottomNavigator({ state, descriptors, navigation }) {
             accessibilityLabel={options.tabBarAccessibilityLabel}
             testID={options.tabBarTestID}
             onPress={
-              label === 'Chat'
-                ? () =>
-                  Linking.openURL(
-                    'https://api.whatsapp.com/send?phone=6289653763986',
-                  )
+              label === 'Account' || label === 'History' | label === 'Wish'
+                ? () => {
+                  getData('user').then(res => {
+                    if (!res) {
+                      navigation.navigate('Login')
+                    } else {
+                      onPress
+                    }
+                  })
+                }
+
                 : onPress
             }
             onLongPress={onLongPress}

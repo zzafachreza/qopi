@@ -246,7 +246,16 @@ export default function Home({ navigation, route }) {
             fontSize: myDimensi / 2
           }}>{user.nama_lengkap}</Text></Text>
         </View>
-        <TouchableOpacity onPress={() => navigation.navigate('Cart')} style={{
+        <TouchableOpacity onPress={() => {
+          getData('user').then(res => {
+            if (!res) {
+              navigation.navigate('Login')
+            } else {
+              navigation.navigate('Cart')
+            }
+
+          })
+        }} style={{
           marginHorizontal: 10,
           padding: 5,
           justifyContent: 'center',
