@@ -500,22 +500,31 @@ export default function Cart({ navigation, route }) {
                         backgroundColor: colors.white
                     }}>
                         <MyButton warna={colors.primary} title="Pilih Pembayaran" onPress={() => {
-                            setLoading(true)
+
                             getData('user').then(res => {
+                                setLoading(true);
+                                console.log('data_user', res)
 
-                                const dd = {
-                                    fid_user: res.id,
-                                    fid_outlet: res.fid_outlet,
-                                    harga_total: total,
-
-                                }
-                                console.log(total)
-                                setTimeout(() => {
+                                if (res.nama_outlet == "Silahkan pilih") {
+                                    Alert.alert('Qopi untuk semua ', 'Silahkan pilih lokasi untuk bisa melakukan pembayaran');
                                     setLoading(false);
-                                    navigation.navigate('Payment', dd)
-                                }, 1200)
+                                    navigation.navigate('Outlet')
+                                } else {
+                                    const dd = {
+                                        fid_user: res.id,
+                                        fid_outlet: res.fid_outlet,
+                                        harga_total: total,
 
-                                console.log(dd);
+                                    }
+
+                                    setTimeout(() => {
+                                        setLoading(false);
+                                        navigation.navigate('Payment', dd)
+                                    }, 1200)
+                                }
+
+
+
 
 
 

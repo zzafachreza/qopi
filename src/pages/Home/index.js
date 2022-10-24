@@ -31,8 +31,12 @@ export default function Home({ navigation, route }) {
         title: obj.notification.title, // (optional)
         message: obj.notification.body, // (required)
       });
-      alert(obj.notification.body);
-      // navigation.navigate('PaymentSuccess');
+
+      if (obj.notification.title == "Pembayaranmu sudah terverifikasi") {
+        navigation.navigate('PaymentSuccess');
+      }
+
+
     });
 
 
@@ -237,6 +241,7 @@ export default function Home({ navigation, route }) {
       }}>
         <View style={{
           flex: 1,
+          padding: 5,
         }}>
           <Text style={{
             fontFamily: fonts.primary[400],
@@ -298,15 +303,7 @@ export default function Home({ navigation, route }) {
           }} />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => {
-
-
-          PushNotification.localNotification({
-            channelId: 'qpcoffee', // (required) channelId, if the channel doesn't exist, notification will not trigger.
-            title: 'test', // (optional)
-            message: 'test112312', // (required)
-          });
-        }} style={{
+        <TouchableOpacity onPress={() => navigation.navigate('Account')} style={{
           marginHorizontal: 15,
         }}>
           <Image source={require('../../assets/logo.png')} style={{

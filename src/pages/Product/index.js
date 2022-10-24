@@ -126,11 +126,13 @@ export default function Product({ navigation, route }) {
                 flex: 1,
                 backgroundColor: colors.white
             }}>
-                <ImageBackground source={require('../../assets/banner_product.png')} style={{
-                    width: windowWidth,
-                    height: 200,
-                    position: 'relative'
-                }}>
+                <ImageBackground
+                    // source={require('../../assets/banner_product.png')}
+                    style={{
+                        width: windowWidth,
+                        height: 200,
+                        position: 'relative'
+                    }}>
 
 
 
@@ -698,12 +700,19 @@ export default function Product({ navigation, route }) {
                             marginBottom: 5,
                             color: colors.white
                         }}>Total</Text>
+                        {/* <Text style={{
+                            fontFamily: fonts.primary[600],
+                            fontSize: myDimensi / 1.5,
+                            marginBottom: 5,
+                            color: colors.white
+                        }}>Rp. {new Intl.NumberFormat().format((barang.harga_barang + barang.total_topping) * barang.qty)}</Text> */}
+
                         <Text style={{
                             fontFamily: fonts.primary[600],
                             fontSize: myDimensi / 1.5,
                             marginBottom: 5,
                             color: colors.white
-                        }}>Rp. {new Intl.NumberFormat().format((barang.harga_barang + barang.total_topping) * barang.qty)}</Text>
+                        }}>Rp. {new Intl.NumberFormat().format((parseFloat(barang.harga_barang) + barang.total_topping) * barang.qty)}</Text>
                     </View>
                     <View style={{
                         justifyContent: 'center',

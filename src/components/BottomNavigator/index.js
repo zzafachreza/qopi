@@ -32,17 +32,7 @@ export default function BottomNavigator({ state, descriptors, navigation }) {
 
         const isFocused = state.index === index;
 
-        const onPress = () => {
-          const event = navigation.emit({
-            type: 'tabPress',
-            target: route.key,
-            canPreventDefault: true,
-          });
 
-          if (!isFocused && !event.defaultPrevented) {
-            navigation.navigate(route.name);
-          }
-        };
 
         const onLongPress = () => {
           navigation.emit({
@@ -79,20 +69,40 @@ export default function BottomNavigator({ state, descriptors, navigation }) {
             accessibilityStates={isFocused ? ['selected'] : []}
             accessibilityLabel={options.tabBarAccessibilityLabel}
             testID={options.tabBarTestID}
-            onPress={
-              label === 'Account' || label === 'History' | label === 'Wish'
-                ? () => {
-                  getData('user').then(res => {
-                    if (!res) {
-                      navigation.navigate('Login')
-                    } else {
-                      onPress
-                    }
-                  })
-                }
+            onPress={() => {
+              const event = navigation.emit({
+                type: 'tabPress',
+                target: route.key,
+                canPreventDefault: true,
+              });
 
-                : onPress
-            }
+              getData('user').then(res => {
+                if (!res) {
+                  navigation.navigate('Login')
+                } else {
+                  if (!isFocused && !event.defaultPrevented) {
+                    navigation.navigate(route.name);
+                  }
+                }
+              })
+
+
+
+
+            }}
+
+            // label === 'Account' || label === 'History' | label === 'Wish'
+            // ? () => {
+            //   getData('user').then(res => {
+            //     if (!res) {
+            //       navigation.navigate('Login')
+            //     } else {
+            //       onPress
+            //     }
+            //   })
+            // }
+
+            // : onPress
             onLongPress={onLongPress}
             style={{ flex: 1 }}>
             <View

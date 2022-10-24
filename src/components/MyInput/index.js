@@ -52,6 +52,7 @@ export default function MyInput({
             borderRadius: 10,
             fontSize: myDimensi / 2,
             paddingLeft: 35,
+            color: colors.black,
             paddingTop: 12,
             fontFamily: fonts.primary.normal
           }}
