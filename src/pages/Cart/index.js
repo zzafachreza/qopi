@@ -157,7 +157,7 @@ export default function Cart({ navigation, route }) {
                                 fontFamily: fonts.secondary[600],
                                 fontSize: myDimensi / 2,
                             }}>
-                            {item.nama_barang}
+                            {item.nama_barang} x {item.qty}
                         </Text>
                         <Text
                             style={{

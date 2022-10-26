@@ -125,6 +125,7 @@ export default function Register({ navigation }) {
 
               style={{
                 borderWidth: 1,
+                color: colors.black,
                 borderColor: colors.border_form,
                 borderRadius: 10,
                 fontSize: myDimensi / 2,
@@ -168,6 +169,7 @@ export default function Register({ navigation }) {
                 fontSize: myDimensi / 2,
                 paddingLeft: 35,
                 paddingTop: 12,
+                color: colors.black,
                 fontFamily: fonts.primary.normal
               }}
               placeholder="Masukan nomor aktif"
@@ -203,6 +205,7 @@ export default function Register({ navigation }) {
                 borderColor: colors.border_form,
                 borderRadius: 10,
                 fontSize: myDimensi / 2,
+                color: colors.black,
                 paddingLeft: 35,
                 paddingTop: 12,
                 fontFamily: fonts.primary.normal
@@ -238,6 +241,7 @@ export default function Register({ navigation }) {
               borderWidth: 1,
               borderColor: colors.border_form,
               borderRadius: 10,
+              color: colors.black,
               fontSize: myDimensi / 2,
               paddingLeft: 35,
               paddingTop: 12,

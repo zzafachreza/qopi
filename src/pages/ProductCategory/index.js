@@ -139,9 +139,25 @@ export default function ProductCategory({ navigation, route }) {
                 backgroundColor: colors.primary,
                 padding: 20,
                 justifyContent: 'center',
-                alignItems: 'center'
+                alignItems: 'center',
+                flexDirection: 'row'
             }}>
+                <TouchableOpacity style={{
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                    flexDirection: 'row',
+                }} onPress={() => navigation.goBack()}>
+                    <Icon type='ionicon' name='arrow-back' color={colors.white} size={myDimensi / 1.2} />
+                    <Text style={{
+                        fontFamily: fonts.primary[600],
+                        fontSize: myDimensi / 2,
+                        color: colors.white,
+                        left: 5,
+                    }}>Kembali</Text>
+                </TouchableOpacity>
                 <Text style={{
+                    flex: 1,
+                    textAlign: 'right',
                     color: colors.white,
                     fontFamily: fonts.secondary[600],
                     fontSize: 14,

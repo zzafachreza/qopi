@@ -123,6 +123,7 @@ export default function Login({ navigation }) {
               style={{
                 borderWidth: 1,
                 borderColor: colors.border_form,
+                color: colors.black,
                 borderRadius: 10,
                 fontSize: myDimensi / 2,
                 paddingLeft: 35,
@@ -163,6 +164,7 @@ export default function Login({ navigation }) {
               fontSize: myDimensi / 2,
               paddingLeft: 35,
               paddingTop: 12,
+              color: colors.black,
               fontFamily: fonts.secondary[400]
 
             }} placeholder="Masukan kata sandi" />

@@ -131,10 +131,23 @@ export default function Product({ navigation, route }) {
                     style={{
                         width: windowWidth,
                         height: 200,
-                        position: 'relative'
+                        position: 'relative',
                     }}>
 
-
+                    <TouchableOpacity style={{
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        flexDirection: 'row',
+                        padding: 10,
+                    }} onPress={() => navigation.goBack()}>
+                        <Icon type='ionicon' name='arrow-back' color={colors.primary} size={myDimensi / 1.2} />
+                        <Text style={{
+                            fontFamily: fonts.primary[600],
+                            fontSize: myDimensi / 2,
+                            color: colors.primary,
+                            left: 5,
+                        }}>Kembali</Text>
+                    </TouchableOpacity>
 
                     <Image style={{
                         width: '100%',

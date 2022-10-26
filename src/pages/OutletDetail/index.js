@@ -5,6 +5,7 @@ import axios from 'axios';
 import { apiURL, colors, fonts, getData, myDimensi, storeData, urlToken, windowHeight } from '../../utils';
 import { Icon } from 'react-native-elements';
 import { WebView } from 'react-native-webview';
+import base64 from 'react-native-base64'
 export default function OutletDetail({ navigation, route }) {
     const i = route.params;
 
@@ -19,7 +20,7 @@ export default function OutletDetail({ navigation, route }) {
                 height: windowHeight / 3.4,
             }}>
                 {/* <WebView source={{ uri: i.link }} /> */}
-                <WebView source={{ html: decodeURIComponent(i.embed.toString()).replace("+", " ").replace("+", " ").replace("+", " ").replace("+", " ").replace("+", " ").replace("+", " ").replace("+", " ").replace("+", " ").replace("+", " ").replace("+", " ").replace('width="600"', 'width="100%"').replace('height="450"', 'height="100%"') }} />
+                <WebView source={{ html: base64.decode(i.embed).replace('width="600"', 'width="100%"').replace('height="450"', 'height="100%"') }} />
             </View>
             <View style={{
                 padding: 10,

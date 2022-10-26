@@ -271,6 +271,7 @@ export default function AccountEdit({ navigation, route }) {
 const styles = StyleSheet.create({
     page: {
         flex: 1,
+        backgroundColor: colors.white,
     },
     image: {
         width: 620 / 4,
