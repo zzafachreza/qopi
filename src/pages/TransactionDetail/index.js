@@ -294,6 +294,63 @@ export default function TransactionDetail({ navigation, route }) {
                             flex: 1,
                             fontFamily: fonts.secondary[400],
                             fontSize: myDimensi / 2.2
+                        }}>Total Transaksi</Text>
+                        <Text
+                            style={{
+
+                                fontFamily: fonts.primary[600],
+                                color: colors.black,
+                                fontSize: myDimensi / 2,
+                            }}>
+                            Rp. {new Intl.NumberFormat().format(header.total_biaya)}
+                        </Text>
+                    </View>
+                    <View style={{
+                        flexDirection: 'row',
+                        marginVertical: 5,
+                    }}>
+                        <Text style={{
+                            flex: 1,
+                            fontFamily: fonts.secondary[400],
+                            fontSize: myDimensi / 2.2
+                        }}>Diskon Member</Text>
+                        <Text
+                            style={{
+
+                                fontFamily: fonts.primary[400],
+                                color: colors.border_label,
+                                fontSize: myDimensi / 2,
+                            }}>
+                            Rp. {new Intl.NumberFormat().format(header.diskon_member)}
+                        </Text>
+                    </View>
+                    <View style={{
+                        flexDirection: 'row',
+                        marginVertical: 5,
+                    }}>
+                        <Text style={{
+                            flex: 1,
+                            fontFamily: fonts.secondary[400],
+                            fontSize: myDimensi / 2.2
+                        }}>Diskon Voucher</Text>
+                        <Text
+                            style={{
+
+                                fontFamily: fonts.primary[400],
+                                color: colors.border_label,
+                                fontSize: myDimensi / 2,
+                            }}>
+                            Rp. {new Intl.NumberFormat().format(header.diskon_voucher)}
+                        </Text>
+                    </View>
+                    <View style={{
+                        flexDirection: 'row',
+                        marginVertical: 5,
+                    }}>
+                        <Text style={{
+                            flex: 1,
+                            fontFamily: fonts.secondary[400],
+                            fontSize: myDimensi / 2.2
                         }}>Total Pembayaran</Text>
                         <Text
                             style={{

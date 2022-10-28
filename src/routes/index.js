@@ -31,7 +31,8 @@ import {
   PaymentSuccess,
   Notification,
   ProductAll,
-  ProductCategory
+  ProductCategory,
+  Voucher
 } from '../pages';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { BottomNavigator } from '../components';
@@ -291,6 +292,21 @@ export default function Router() {
         options={{
           headerShown: false,
           headerTitle: 'Pemberitahuan',
+          headerStyle: {
+            backgroundColor: colors.primary,
+          },
+          headerTintColor: colors.white
+
+        }}
+      />
+
+
+      <Stack.Screen
+        name="Voucher"
+        component={Voucher}
+        options={{
+          headerShown: true,
+          headerTitle: 'Voucher',
           headerStyle: {
             backgroundColor: colors.primary,
           },

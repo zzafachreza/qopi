@@ -22,6 +22,7 @@ import TransactionDetail from './TransactionDetail';
 import Notification from './Notification';
 import ProductAll from './ProductAll';
 import ProductCategory from './ProductCategory';
+import Voucher from './Voucher';
 
 
 
@@ -56,6 +57,7 @@ export {
   TransactionDetail,
   Notification,
   ProductAll,
-  ProductCategory
+  ProductCategory,
+  Voucher
 
 };

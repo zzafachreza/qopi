@@ -37,6 +37,10 @@ export default function Cart({ navigation, route }) {
     const [loading, setLoading] = useState(false);
     const [jumlah, setJumlah] = useState(1);
     const [itemz, setItem] = useState({});
+    const [voucher, setVoucher] = useState({
+        diskon: 0,
+        diskon_persen: 0,
+    });
 
     const modalizeRef = useRef();
     const [keyboardStatus, setKeyboardStatus] = useState(undefined);
@@ -68,6 +72,7 @@ export default function Cart({ navigation, route }) {
     //   useEffect(() => {
 
     //   }, []);
+    const [member, setMember] = useState({});
 
     useEffect(() => {
         if (isFocused) {
@@ -75,6 +80,14 @@ export default function Cart({ navigation, route }) {
                 setUser(rx);
                 __getDataBarang(rx.id);
             });
+            getData('member').then(m => {
+                setMember(m);
+                console.log('member', m)
+            })
+            getData('voucher').then(v => {
+                setVoucher(v);
+
+            })
 
         }
 
@@ -128,8 +141,9 @@ export default function Cart({ navigation, route }) {
 
 
 
-
-
+    var total_bayar = (total - (total * member.diskon_member)) - ((total - (total * member.diskon_member)) * voucher.diskon);
+    var diskon_voucher = (total - (total * member.diskon_member)) * voucher.diskon;
+    var diskon_member = total * member.diskon_member;
 
     const __renderItem = ({ item, index }) => {
 
@@ -459,6 +473,170 @@ export default function Cart({ navigation, route }) {
                     </View>
                 </View>
             </Modalize>
+
+
+            <View
+                style={{
+                    flexDirection: 'row',
+                }}>
+                <View
+                    style={{
+                        flex: 1,
+                        backgroundColor: colors.white,
+                        justifyContent: 'flex-start',
+
+                        alignItems: 'center',
+                        paddingHorizontal: 15,
+                        flexDirection: 'row'
+                    }}>
+
+                    <Image source={require('../../assets/member.png')} style={{
+                        width: 11,
+                        height: 15
+                    }} />
+                    <Text
+                        style={{
+                            left: 10,
+                            fontSize: myDimensi / 2,
+                            fontFamily: fonts.secondary[600],
+                            color: colors.grey_base,
+
+                        }}>
+                        {member.tipe}
+                    </Text>
+
+                </View>
+                <View style={{
+
+                    padding: 10,
+                    backgroundColor: colors.white,
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                    paddingHorizontal: 15,
+                }}>
+                    <View >
+                        <Text style={{
+                            textAlign: 'right',
+                            fontSize: myDimensi / 2.3,
+                            fontFamily: fonts.secondary[600],
+                            color: colors.primary,
+                        }}> {new Intl.NumberFormat().format(member.persen_member)}%</Text>
+                        <Text style={{
+                            textAlign: 'right',
+                            fontSize: myDimensi / 2.3,
+                            fontFamily: fonts.secondary[400],
+                            color: colors.black,
+                        }}>   Rp. {new Intl.NumberFormat().format(diskon_member)}</Text>
+                    </View>
+                    <View style={{
+                        padding: 10,
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
+                        <Icon name='tag' size={myDimensi / 2} light color={colors.secondary} />
+                    </View>
+
+                </View>
+
+
+
+            </View>
+
+
+            <View
+                style={{
+                    flexDirection: 'row',
+                }}>
+                <View
+                    style={{
+                        flex: 1,
+                        backgroundColor: colors.white,
+                        justifyContent: 'flex-start',
+
+                        alignItems: 'center',
+                        paddingHorizontal: 15,
+                        flexDirection: 'row'
+                    }}>
+
+                    <Icon name='credit-card' color={colors.primary} />
+                    <Text
+                        style={{
+                            left: 10,
+                            fontSize: myDimensi / 2.3,
+                            fontFamily: fonts.secondary[400],
+                            color: colors.black,
+
+                        }}>
+                        Voucher
+                    </Text>
+
+                </View>
+                {voucher.diskon == 0 && <TouchableOpacity onPress={() => navigation.navigate('Voucher')} style={{
+
+                    padding: 10,
+                    backgroundColor: colors.white,
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+
+                    alignItems: 'center',
+                    paddingHorizontal: 15,
+                }}>
+                    <Text style={{
+                        right: 10,
+                        fontSize: myDimensi / 2.3,
+                        fontFamily: fonts.secondary[400],
+                        color: colors.border_label,
+                    }}>Pilih Voucher</Text>
+                    <Icon name='chevron-right' size={myDimensi / 2} light color={colors.border_label} />
+                </TouchableOpacity>}
+
+                {voucher.diskon != 0 && <View onPress={() => navigation.navigate('Voucher')} style={{
+
+                    padding: 10,
+                    backgroundColor: colors.white,
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                    paddingHorizontal: 15,
+                }}>
+                    <View >
+                        <Text style={{
+                            textAlign: 'right',
+                            fontSize: myDimensi / 2.3,
+                            fontFamily: fonts.secondary[600],
+                            color: colors.primary,
+                        }}> {new Intl.NumberFormat().format(voucher.diskon_persen)}%</Text>
+                        <Text style={{
+                            textAlign: 'right',
+                            fontSize: myDimensi / 2.3,
+                            fontFamily: fonts.secondary[400],
+                            color: colors.black,
+                        }}>   Rp. {new Intl.NumberFormat().format(diskon_voucher)}</Text>
+                    </View>
+                    <TouchableOpacity onPress={() => {
+                        storeData('voucher', {
+                            diskon: 0,
+                            diskon_persen: 0,
+                        });
+                        setVoucher({
+                            diskon: 0,
+                            diskon_persen: 0,
+                        })
+                    }} style={{
+                        padding: 10,
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
+                        <Icon name='trash-alt' size={myDimensi / 2} light color={colors.danger} />
+                    </TouchableOpacity>
+                </View>}
+
+
+
+            </View>
+
+
             {!loading &&
                 <View
                     style={{
@@ -490,7 +668,7 @@ export default function Cart({ navigation, route }) {
                                 color: colors.black,
                                 left: 10,
                             }}>
-                            Rp. {new Intl.NumberFormat().format(total)}
+                            Rp. {new Intl.NumberFormat().format(total_bayar)}
 
                         </Text>
                     </View>
@@ -513,9 +691,14 @@ export default function Cart({ navigation, route }) {
                                     const dd = {
                                         fid_user: res.id,
                                         fid_outlet: res.fid_outlet,
-                                        harga_total: total,
+                                        harga_total: total_bayar,
+                                        diskon_voucher: diskon_voucher,
+                                        persen_voucher: voucher.diskon_persen,
+                                        diskon_member: diskon_member,
+                                        persen_member: member.persen_member,
 
                                     }
+                                    console.warn(dd)
 
                                     setTimeout(() => {
                                         setLoading(false);
