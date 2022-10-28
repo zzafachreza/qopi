@@ -5,6 +5,7 @@ import {
   Animated,
   ActivityIndicator,
 } from 'react-native';
+import { storeData } from '../../utils';
 import { colors } from '../../utils/colors';
 import { windowWidth } from '../../utils/fonts';
 
@@ -21,6 +22,10 @@ export default function Splash({ navigation }) {
   useEffect(() => {
 
     setTimeout(() => {
+      storeData('voucher', {
+        diskon: 0,
+        diskon_persen: 0,
+      })
       navigation.replace('MainApp');
     }, 1500)
   }, []);

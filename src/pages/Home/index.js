@@ -343,7 +343,9 @@ export default function Home({ navigation, route }) {
         <MyCarouser />
 
         {/* Jenis Member */}
-        <View style={{
+
+
+        {user.id != null && <View style={{
           borderRadius: 15,
           backgroundColor: colors.member_card,
         }}>
@@ -549,8 +551,7 @@ export default function Home({ navigation, route }) {
 
 
           </View>
-        </View>
-
+        </View>}
         {/* Lokasi Outlite */}
         <TouchableOpacity onPress={() => {
           if (user.id == null) {

@@ -27,7 +27,17 @@ import 'intl/locale-data/jsonp/en';
 import { showMessage } from 'react-native-flash-message';
 import { Modalize } from 'react-native-modalize';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import RNDateTimePicker from '@react-native-community/datetimepicker';
 export default function Cart({ navigation, route }) {
+
+    const [openDate, setOpenDate] = useState(false);
+    const [openTime, setOpenTime] = useState(false);
+    const [pickup, setPickup] = useState({
+        tanggal: new Date().toISOString().split('T')[0],
+        jam: new Date().getHours() + ':' + new Date().getMinutes()
+    });
+
+
     const [user, setUser] = useState({});
     const [data, setData] = useState([]);
     const [buka, setbuka] = useState(true);
@@ -41,6 +51,14 @@ export default function Cart({ navigation, route }) {
         diskon: 0,
         diskon_persen: 0,
     });
+
+    const Indonesia3Tgl = (x) => {
+        var bulanIndo = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+        var dd = x.split("-");
+
+        return dd[2] + ' ' + bulanIndo[dd[1]] + ' ' + dd[0];
+
+    }
 
     const modalizeRef = useRef();
     const [keyboardStatus, setKeyboardStatus] = useState(undefined);
@@ -86,7 +104,6 @@ export default function Cart({ navigation, route }) {
             })
             getData('voucher').then(v => {
                 setVoucher(v);
-
             })
 
         }
@@ -636,6 +653,87 @@ export default function Cart({ navigation, route }) {
 
             </View>
 
+            <View
+                style={{
+                    flexDirection: 'row',
+                }}>
+                <View
+                    style={{
+                        flex: 1,
+                        backgroundColor: colors.white,
+                        justifyContent: 'flex-start',
+
+                        alignItems: 'center',
+                        paddingHorizontal: 15,
+                        flexDirection: 'row'
+                    }}>
+
+                    <Icon name='calendar-alt' color={colors.primary} />
+                    <Text
+                        style={{
+                            left: 10,
+                            fontSize: myDimensi / 2.3,
+                            fontFamily: fonts.secondary[400],
+                            color: colors.black,
+
+                        }}>
+                        waktu Pengambilan
+                    </Text>
+
+                </View>
+
+
+                <TouchableOpacity onPress={() => {
+                    setOpenDate(true)
+                }} style={{
+
+                    padding: 10,
+                    backgroundColor: colors.white,
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+
+                    alignItems: 'center',
+                    paddingHorizontal: 15,
+                }}>
+                    <Text style={{
+                        right: 10,
+                        fontSize: myDimensi / 2.3,
+                        fontFamily: fonts.secondary[400],
+                        color: colors.border_label,
+                    }}>{Indonesia3Tgl(pickup.tanggal)} {pickup.jam}</Text>
+                    <Icon name='chevron-right' size={myDimensi / 2} light color={colors.border_label} />
+                </TouchableOpacity>
+
+                {openDate && <RNDateTimePicker onChange={(event, date) => {
+
+                    const datetimeSQL = new Date(date).toISOString().split('T')[0];
+
+                    console.log('date', datetimeSQL);
+                    setPickup({
+                        ...pickup,
+                        tanggal: datetimeSQL
+                    })
+                    setOpenDate(false);
+                    setOpenTime(true);
+                }} mode="date" value={new Date()} />}
+
+
+                {openTime && <RNDateTimePicker mode="time" onChange={(event, date) => {
+
+                    const jam = new Date(date).getHours() + ':' + new Date(date).getMinutes();
+
+                    console.log('time', jam);
+                    setPickup({
+                        ...pickup,
+                        jam: jam
+                    })
+                    setOpenTime(false);
+                }} value={new Date()} />}
+
+
+
+            </View>
+
 
             {!loading &&
                 <View
@@ -696,6 +794,8 @@ export default function Cart({ navigation, route }) {
                                         persen_voucher: voucher.diskon_persen,
                                         diskon_member: diskon_member,
                                         persen_member: member.persen_member,
+                                        tanggal_pickup: pickup.tanggal,
+                                        jam_pickup: pickup.jam
 
                                     }
                                     console.warn(dd)

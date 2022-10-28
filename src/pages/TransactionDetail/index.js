@@ -37,6 +37,7 @@ export default function TransactionDetail({ navigation, route }) {
         if (isFocused) {
             __getTransaction(route.params.inv);
             __getTransactionDetail(route.params.inv);
+            __getTransactionStatus(route.params.inv);
         }
     }, [isFocused]);
 
@@ -46,17 +47,29 @@ export default function TransactionDetail({ navigation, route }) {
             inv: inv,
             api_token: urlToken
         }).then(res => {
-            console.log(res.data);
+            // console.log(res.data);
             setHeader(res.data)
         })
     }
+
+
+    const __getTransactionStatus = (inv) => {
+        axios.post(apiURL + 'v1_history_detail_status.php', {
+            inv: inv,
+            api_token: urlToken
+        }).then(res => {
+            console.warn(res.data);
+            setStatus(res.data)
+        })
+    }
+
 
     const __getTransactionDetail = (inv) => {
         axios.post(apiURL + 'v1_history_detail_produk.php', {
             inv: inv,
             api_token: urlToken
         }).then(res => {
-            console.log(res.data);
+            // console.log(res.data);
             setDatail(res.data)
         })
     }
@@ -65,8 +78,65 @@ export default function TransactionDetail({ navigation, route }) {
 
     const [detail, setDatail] = useState([]);
     const [header, setHeader] = useState([]);
+    const [status, setStatus] = useState([]);
+
+    const MyList = ({ judul, isi, tanggal }) => {
+        return (
+            <View style={{
+                flexDirection: 'row',
+                backgroundColor: colors.white,
+            }}>
+
+                <View style={{
+                    marginLeft: 10,
+                    width: 10,
+                    borderLeftWidth: 1,
+                    justifyContent: 'flex-start',
+                    alignItems: 'center'
+                }}>
+                    <View style={{
+                        backgroundColor: colors.primary,
+                        width: 10,
+                        marginLeft: -10,
+                        height: 10,
+                        borderRadius: 5,
+                    }} />
+                </View>
+                <View style={{
+                    flex: 1.5,
+                    padding: 10,
+                    justifyContent: 'flex-start',
+                }}>
+                    <Text style={{
+                        fontFamily: fonts.secondary[600],
+                        fontSize: myDimensi / 2,
+                        color: colors.black,
+                    }}>
+                        {judul}
+                    </Text>
+
+                    <Text style={{
+                        fontFamily: fonts.secondary[400],
+                        fontSize: myDimensi / 2.5,
+                        color: colors.black,
+
+                    }}>
+                        {isi}
+                    </Text>
+                    <Text style={{
+                        fontFamily: fonts.secondary[400],
+                        fontSize: myDimensi / 2.5,
+                        color: colors.primary,
+
+                    }}>
+                        {tanggal}
+                    </Text>
 
 
+                </View>
+            </View>
+        )
+    }
 
     const __renderItem = ({ item, index }) => {
 
@@ -82,21 +152,37 @@ export default function TransactionDetail({ navigation, route }) {
                     <View style={{
                         flex: 1,
                     }}>
-                        <Text
-                            style={{
-                                fontFamily: fonts.secondary[600],
-                                fontSize: myDimensi / 2,
-                            }}>
-                            {item.nama_barang}
-                        </Text>
-                        <Text
-                            style={{
-                                fontFamily: fonts.secondary[400],
-                                fontSize: myDimensi / 2.5,
-                                color: colors.border_label
-                            }}>
-                            {item.ukuran}, {item.suhu} {item.data_topping == '' ? '' : ', ' + item.data_topping} {item.catatan !== '' ? ', ' + item.catatan : ''}
-                        </Text>
+                        <View style={{
+                            flexDirection: 'row',
+                        }}>
+                            <Text
+                                style={{
+                                    fontFamily: fonts.secondary[600],
+                                    fontSize: myDimensi / 2.2,
+                                    marginRight: 10,
+
+                                }}>
+                                {item.qty}x
+                            </Text>
+                            <View>
+                                <Text
+                                    style={{
+                                        fontFamily: fonts.secondary[600],
+                                        fontSize: myDimensi / 2,
+                                    }}>
+                                    {item.nama_barang}
+                                </Text>
+                                <Text
+                                    style={{
+                                        fontFamily: fonts.secondary[400],
+                                        fontSize: myDimensi / 2.5,
+                                        color: colors.border_label
+                                    }}>
+                                    {item.ukuran}, {item.suhu} {item.data_topping == '' ? '' : ', ' + item.data_topping} {item.catatan !== '' ? ', ' + item.catatan : ''}
+                                </Text>
+                            </View>
+                        </View>
+
                     </View>
 
                 </View>
@@ -149,6 +235,22 @@ export default function TransactionDetail({ navigation, route }) {
                         </View>
 
                     </View>
+
+                    <View style={{
+                        flexDirection: 'row',
+                        marginVertical: 5,
+                    }}>
+                        <Text style={{
+                            flex: 1,
+                            fontFamily: fonts.secondary[400],
+                            fontSize: myDimensi / 2.2
+                        }}>Tanggal Transaksi</Text>
+                        <Text style={{
+                            fontFamily: fonts.secondary[400],
+                            fontSize: myDimensi / 2.2
+                        }}>{header.tanggal_jam}</Text>
+                    </View>
+
                     <View style={{
                         flexDirection: 'row',
                         marginVertical: 5,
@@ -169,58 +271,22 @@ export default function TransactionDetail({ navigation, route }) {
                             }}>{header.status}</Text>
                         </View>
                     </View>
-                    <View style={{
-                        flexDirection: 'row',
-                        marginVertical: 5,
-                    }}>
-                        <Text style={{
-                            flex: 1,
-                            fontFamily: fonts.secondary[400],
-                            fontSize: myDimensi / 2.2
-                        }}>Tanggal Transaksi</Text>
-                        <Text style={{
-                            fontFamily: fonts.secondary[400],
-                            fontSize: myDimensi / 2.2
-                        }}>{header.tanggal_jam}</Text>
-                    </View>
-                    <View style={{
-                        flexDirection: 'row',
-                        marginVertical: 5,
-                    }}>
-                        <Text style={{
-                            flex: 1,
-                            fontFamily: fonts.secondary[400],
-                            fontSize: myDimensi / 2.2
-                        }}>Nama Outlet</Text>
-                        <Text style={{
-                            fontFamily: fonts.secondary[400],
-                            fontSize: myDimensi / 2.2
-                        }}>{header.nama_outlet}</Text>
-                    </View>
 
-                    <View style={{
-
-                        marginVertical: 5,
-                    }}>
-                        <Text style={{
-                            flex: 1,
-                            fontFamily: fonts.secondary[400],
-                            fontSize: myDimensi / 2.2
-                        }}>Alamat Outlet</Text>
-                        <Text style={{
-                            fontFamily: fonts.secondary[400],
-                            fontSize: myDimensi / 2.2
-                        }}>{header.alamat_outlet}</Text>
-                    </View>
 
                 </View>
 
+                {status.map(i => {
+                    return (
+                        <MyList judul={i.status} tanggal={i.tanggal_jam} isi={i.isi} />
+
+                    )
+                })}
                 {/* detail produk */}
 
                 <View style={{
+                    marginTop: 10,
                     backgroundColor: colors.white,
                     padding: 10,
-                    marginVertical: 10,
                 }}>
                     <View style={{
                         flexDirection: 'row',
@@ -245,12 +311,102 @@ export default function TransactionDetail({ navigation, route }) {
                     <FlatList data={detail} renderItem={__renderItem} />
                 </View>
 
+                {/* detail pickup */}
+
+                <View style={{
+                    backgroundColor: colors.white,
+                    padding: 10,
+                }}>
+                    <View style={{
+                        flexDirection: 'row',
+                        paddingBottom: 10,
+                    }}>
+                        <View style={{
+                            flex: 1,
+                        }}>
+                            <Text style={{
+                                fontFamily: fonts.secondary[600],
+                                fontSize: myDimensi / 2,
+                                marginBottom: 10,
+
+                            }}>Detail Pickup</Text>
+                            <View style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                            }}>
+                                <View style={{
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    padding: 10,
+                                }}>
+                                    <Image source={require('../../assets/pickup_location.png')} style={{
+                                        width: 25,
+                                        height: 20
+                                    }} />
+                                </View>
+                                <View>
+                                    <Text style={{
+                                        fontFamily: fonts.primary[600],
+                                        fontSize: myDimensi / 2,
+                                        color: colors.black,
+                                        marginBottom: 5,
+
+                                    }}>Lokasi Pick Up</Text>
+                                    <Text style={{
+                                        fontFamily: fonts.secondary[600],
+                                        fontSize: myDimensi / 2.2,
+                                        color: colors.primary,
+                                    }}>{header.nama_outlet}</Text>
+                                    <Text style={{
+                                        fontFamily: fonts.primary[400],
+                                        fontSize: myDimensi / 3,
+                                        color: colors.black,
+
+                                    }}>{header.alamat_outlet}</Text>
+                                </View>
+                            </View>
+                            <View style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                            }}>
+                                <View style={{
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    padding: 10,
+                                }}>
+                                    <Image source={require('../../assets/pickup_time.png')} style={{
+                                        width: 25,
+                                        height: 20
+                                    }} />
+                                </View>
+                                <View>
+                                    <Text style={{
+                                        marginTop: 10,
+                                        fontFamily: fonts.primary[600],
+                                        fontSize: myDimensi / 2,
+                                        color: colors.black,
+                                        marginBottom: 5,
+
+                                    }}>Waktu Pengambilan</Text>
+                                    <Text style={{
+                                        fontFamily: fonts.secondary[400],
+                                        fontSize: myDimensi / 2.2,
+                                        color: colors.primary,
+                                    }}>{header.tanggal_jam_pickup}</Text>
+
+                                </View>
+                            </View>
+
+                        </View>
+
+                    </View>
+
+                </View>
                 {/* Rincian Pembayaran */}
 
                 <View style={{
                     backgroundColor: colors.white,
                     padding: 10,
-                    marginVertical: 5,
                 }}>
                     <View style={{
                         flexDirection: 'row',
@@ -365,7 +521,31 @@ export default function TransactionDetail({ navigation, route }) {
 
                 </View>
 
+
+
+
+
             </ScrollView>
+            {header.status == "Pesanan Siap" &&
+                <View style={{
+                    padding: 10,
+                    backgroundColor: colors.white
+                }}>
+                    <MyButton onPress={() => {
+                        axios.post(apiURL + 'v1_terima_pesanan.php', {
+                            inv: header.inv,
+                            api_token: urlToken
+                        }).then(res => {
+                            __getTransaction(header.inv);
+                            __getTransactionDetail(header.inv);
+                            __getTransactionStatus(header.inv);
+
+
+                        })
+                    }} title="Pesanan Diterima" warna={colors.primary} />
+                </View>
+
+            }
         </SafeAreaView >
     )
 }
