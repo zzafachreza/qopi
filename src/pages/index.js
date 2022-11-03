@@ -23,6 +23,7 @@ import Notification from './Notification';
 import ProductAll from './ProductAll';
 import ProductCategory from './ProductCategory';
 import Voucher from './Voucher';
+import AccountMember from './AccountMember';
 
 
 
@@ -47,6 +48,7 @@ export {
   Wish,
   Account,
   AccountEdit,
+  AccountMember,
   Cart,
   CartEdit,
   Outlet,

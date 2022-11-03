@@ -32,7 +32,8 @@ import {
   Notification,
   ProductAll,
   ProductCategory,
-  Voucher
+  Voucher,
+  AccountMember
 } from '../pages';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { BottomNavigator } from '../components';
@@ -157,6 +158,21 @@ export default function Router() {
           }
         }}
       />
+
+      <Stack.Screen
+        name="AccountMember"
+        component={AccountMember}
+        options={{
+          headerShown: true,
+          headerTitle: 'Informasi Membership',
+          headerTintColor: colors.white,
+          headerStyle: {
+            backgroundColor: colors.primary
+          }
+        }}
+      />
+
+
       <Stack.Screen
         name="Cart"
         component={Cart}

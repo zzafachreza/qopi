@@ -13,6 +13,7 @@ import messaging from '@react-native-firebase/messaging';
 import PushNotification from 'react-native-push-notification';
 import { useIsFocused } from '@react-navigation/native';
 import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
+import { TouchableNativeFeedback } from 'react-native';
 export default function Home({ navigation, route }) {
 
   const [user, setUser] = useState({});
@@ -345,213 +346,81 @@ export default function Home({ navigation, route }) {
         {/* Jenis Member */}
 
 
-        {user.id != null && <View style={{
-          borderRadius: 15,
-          backgroundColor: colors.member_card,
-        }}>
-          <View style={{
-            flexDirection: 'row',
-
-            paddingVertical: 5,
-            marginVertical: 5,
-
-            marginHorizontal: 10,
-          }}>
+        {user.id != null &&
+          <TouchableNativeFeedback onPress={() => navigation.navigate('AccountMember')}>
             <View style={{
-              flex: 1,
-              padding: 10,
-              justifyContent: 'center',
-              alignItems: 'center'
+              borderRadius: 15,
+              marginHorizontal: 10,
+              backgroundColor: colors.member_card,
             }}>
-              <Text style={{
-                fontFamily: fonts.primary[400],
-                fontSize: myDimensi / 2.5,
-                marginBottom: 5,
-              }}>Membersip</Text>
               <View style={{
                 flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center'
+
+                paddingVertical: 5,
+                marginVertical: 5,
+
+                marginHorizontal: 10,
               }}>
-                <Image source={require('../../assets/member.png')} style={{
-                  width: 11,
-                  height: 15
-                }} />
-                <Text style={{
-                  fontFamily: fonts.primary[600],
-                  fontSize: myDimensi / 2,
-                  color: colors.grey_base,
-                  left: 5,
-                }}>{member.tipe}</Text>
+                <View style={{
+                  flex: 1,
+                  padding: 10,
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}>
+                  <Text style={{
+                    fontFamily: fonts.primary[400],
+                    fontSize: myDimensi / 2.5,
+                    marginBottom: 5,
+                  }}>Membersip</Text>
+                  <View style={{
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                  }}>
+                    <Image source={require('../../assets/member.png')} style={{
+                      width: 11,
+                      height: 15
+                    }} />
+                    <Text style={{
+                      fontFamily: fonts.primary[600],
+                      fontSize: myDimensi / 2,
+                      color: colors.grey_base,
+                      left: 5,
+                    }}>{member.tipe}</Text>
+                  </View>
+                </View>
+                <View style={{
+                  flex: 1,
+                  padding: 10,
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}>
+                  <Text style={{
+                    fontFamily: fonts.primary[400],
+                    fontSize: myDimensi / 2.5,
+                    marginBottom: 5,
+                  }}>Total</Text>
+                  <View style={{
+                    flexDirection: 'row',
+                    alignItems: 'center'
+                  }}>
+                    <Image source={require('../../assets/coin.png')} style={{
+                      width: 15,
+                      height: 20,
+                      resizeMode: 'contain'
+                    }} />
+                    <Text style={{
+                      fontFamily: fonts.primary[600],
+                      fontSize: myDimensi / 2,
+                      color: colors.grey_base,
+                      left: 5,
+                    }}>{member.point} poin</Text>
+                  </View>
+                </View>
               </View>
             </View>
-            <View style={{
-              flex: 1,
-              padding: 10,
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}>
-              <Text style={{
-                fontFamily: fonts.primary[400],
-                fontSize: myDimensi / 2.5,
-                marginBottom: 5,
-              }}>Total</Text>
-              <View style={{
-                flexDirection: 'row',
-                alignItems: 'center'
-              }}>
-                <Image source={require('../../assets/coin.png')} style={{
-                  width: 15,
-                  height: 20,
-                  resizeMode: 'contain'
-                }} />
-                <Text style={{
-                  fontFamily: fonts.primary[600],
-                  fontSize: myDimensi / 2,
-                  color: colors.grey_base,
-                  left: 5,
-                }}>{member.point} point</Text>
-              </View>
-            </View>
-          </View>
-
-
-
-          <View style={{
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-            paddingVertical: 5,
-            marginVertical: 5,
-
-            marginHorizontal: 10,
-          }}>
-            <View style={{
-              justifyContent: 'center', alignItems: 'center'
-            }}>
-              <View style={{
-                width: 10,
-                height: 10,
-                backgroundColor: colors.primary,
-                borderRadius: 5,
-              }} />
-              <Text style={{
-                marginTop: 10,
-                fontFamily: fonts.primary[600],
-                fontSize: myDimensi / 2.5,
-                color: colors.black,
-              }}>Raden</Text>
-              <Text style={{
-                fontFamily: fonts.primary[400],
-                fontSize: myDimensi / 2.5,
-                color: colors.black,
-              }}>10 Point</Text>
-            </View>
-            <View style={{
-              borderTopWidth: 2,
-              marginTop: 5,
-              borderTopColor: member.tipe == 'Adipati' ? colors.primary : colors.border_label,
-              flex: 0.5,
-            }} />
-            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-              <View style={{
-                width: 10,
-                height: 10,
-                backgroundColor: member.tipe == 'Adipati' ? colors.primary : colors.border_label,
-                borderRadius: 5,
-              }} />
-              <Text style={{
-                marginTop: 10,
-                fontFamily: fonts.primary[600],
-                fontSize: myDimensi / 2.5,
-                color: member.tipe == 'Adipati' ? colors.primary : colors.border_label,
-              }}>Adipati</Text>
-              <Text style={{
-                fontFamily: fonts.primary[400],
-                fontSize: myDimensi / 2.5,
-                color: member.tipe == 'Adipati' ? colors.primary : colors.border_label,
-              }}>20 Point</Text>
-            </View>
-            <View style={{
-              borderTopWidth: 2,
-              marginTop: 5,
-              borderTopColor: member.tipe == 'Pangeran' ? colors.primary : colors.border_label,
-              flex: 0.5,
-            }} />
-            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-              <View style={{
-                width: 10,
-                height: 10,
-                backgroundColor: member.tipe == 'Pangeran' ? colors.primary : colors.border_label,
-                borderRadius: 5,
-              }} />
-              <Text style={{
-                marginTop: 10,
-                fontFamily: fonts.primary[600],
-                fontSize: myDimensi / 2.5,
-                color: member.tipe == 'Pangeran' ? colors.black : colors.border_label,
-              }}>Pangeran</Text>
-              <Text style={{
-                fontFamily: fonts.primary[400],
-                fontSize: myDimensi / 2.5,
-                color: member.tipe == 'Pangeran' ? colors.black : colors.border_label,
-              }}>30 Point</Text>
-            </View>
-            <View style={{
-              borderTopWidth: 2,
-              marginTop: 5,
-              borderTopColor: member.tipe == 'Permaisuri' ? colors.primary : colors.border_label,
-              flex: 0.5,
-            }} />
-            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-              <View style={{
-                marginTop: 2,
-                width: 10,
-                height: 10,
-                backgroundColor: member.tipe == 'Permaisuri' ? colors.primary : colors.border_label,
-                borderRadius: 5,
-              }} />
-              <Text style={{
-                marginTop: 10,
-                fontFamily: fonts.primary[600],
-                fontSize: myDimensi / 2.5,
-                color: member.tipe == 'Permaisuri' ? colors.black : colors.border_label,
-              }}>Permaisuri</Text>
-              <Text style={{
-                fontFamily: fonts.primary[400],
-                fontSize: myDimensi / 2.5,
-                color: member.tipe == 'Permaisuri' ? colors.black : colors.border_label,
-              }}>40 Point</Text>
-            </View>
-            <View style={{
-              borderTopWidth: 2,
-              marginTop: 5,
-              borderTopColor: member.tipe == 'Sultan' ? colors.primary : colors.border_label,
-              flex: 0.5,
-            }} />
-
-            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-              <View style={{
-                width: 10,
-                height: 10,
-                backgroundColor: member.tipe == 'Sultan' ? colors.primary : colors.border_label,
-                borderRadius: 5,
-              }} />
-              <Text style={{
-                marginTop: 10,
-                fontFamily: fonts.primary[600],
-                fontSize: myDimensi / 2.5,
-                color: member.tipe == 'Sultan' ? colors.black : colors.border_label,
-              }}>Sultan</Text>
-              <Text style={{
-                fontFamily: fonts.primary[400],
-                fontSize: myDimensi / 2.5,
-                color: member.tipe == 'Sultan' ? colors.black : colors.border_label,
-              }}>50 Point</Text>
-            </View>
-
-
-          </View>
-        </View>}
+          </TouchableNativeFeedback>
+        }
         {/* Lokasi Outlite */}
         <TouchableOpacity onPress={() => {
           if (user.id == null) {
