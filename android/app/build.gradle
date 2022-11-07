@@ -135,6 +135,9 @@ android {
     }
 
      packagingOptions {
+          pickFirst '**/libc++_shared.so'
+        pickFirst '**/libfbjni.so'
+        
         exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/LICENSE.txt'

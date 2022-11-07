@@ -56,7 +56,7 @@ export default function MyInput({
             paddingTop: 12,
             fontFamily: fonts.primary.normal
           }}
-          placeholderTextColor={colors.border_label}
+          placeholderTextColor={colors.border_form}
           placeholder={placeholder}
         />
       </View>

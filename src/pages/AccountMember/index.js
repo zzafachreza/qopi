@@ -60,6 +60,7 @@ export default function AccountMember({ navigation, route }) {
         setLoading(true)
         axios.post(apiURL + 'v1_voucher.php', {
             api_token: urlToken,
+            member: 1
         }).then(res => {
             console.log(res.data);
             setData(res.data);
@@ -141,7 +142,7 @@ export default function AccountMember({ navigation, route }) {
                 <Text style={{
                     textAlign: 'center',
                     fontFamily: fonts.primary[400],
-                    fontSize: myDimensi / 3.5,
+                    fontSize: myDimensi / 2,
                     color: colors.black,
                     marginBottom: 20,
                 }}>Segera tukarkan poin kamu</Text>
@@ -375,7 +376,7 @@ export default function AccountMember({ navigation, route }) {
                                 }}>
                                     <Image source={require('../../assets/logo.png')} style={{
                                         width: '100%',
-                                        height: 100,
+                                        height: 80,
 
                                     }} />
                                 </View>
@@ -384,28 +385,43 @@ export default function AccountMember({ navigation, route }) {
                                 }}>
                                     <Text style={{
                                         fontFamily: fonts.secondary[600],
-                                        fontSize: myDimensi / 2,
+                                        fontSize: myDimensi / 1.2,
                                         color: colors.black,
                                     }}>Diskon {i.diskon}%</Text>
-                                    <Text style={{
+                                    {i.maksimal > 0 && <Text style={{
                                         fontFamily: fonts.secondary[600],
-                                        fontSize: myDimensi / 3.5,
+                                        fontSize: myDimensi / 2,
                                         color: colors.black,
-                                    }}>s/d Rp. 50.000</Text>
+                                    }}>s/d Rp. {new Intl.NumberFormat().format(i.maksimal)}</Text>}
+
                                     <Text style={{
                                         fontFamily: fonts.secondary[400],
-                                        fontSize: myDimensi / 5,
+                                        fontSize: myDimensi / 2.5,
                                         color: colors.border,
                                     }}>Berakhir pada {i.tanggal_berakhir}</Text>
-                                    <TouchableOpacity style={{
+                                    <TouchableOpacity onPress={() => {
+
+                                        console.log(i.id + user.id + i.point);
+
+                                        axios.post(apiURL + 'v1_voucher_get.php', {
+                                            fid_voucher: i.id,
+                                            api_token: urlToken,
+                                            point: i.point,
+                                            fid_user: user.id
+                                        }).then(res => {
+                                            console.log(res.data)
+                                        })
+
+                                    }} style={{
                                         paddingHorizontal: 10,
                                         backgroundColor: colors.primary,
                                         width: 80,
                                         borderRadius: 10,
+                                        marginTop: 10,
                                     }}>
                                         <Text style={{
                                             fontFamily: fonts.secondary[400],
-                                            fontSize: myDimensi / 3.2,
+                                            fontSize: myDimensi / 2,
                                             color: colors.white,
                                             textAlign: 'center'
                                         }}>Tukar</Text>

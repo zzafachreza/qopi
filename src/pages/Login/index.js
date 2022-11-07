@@ -115,7 +115,7 @@ export default function Login({ navigation }) {
             }}>
               <Icon type='ionicon' name='mail-outline' size={myDimensi / 1.6} color={colors.primary} />
             </View>
-            <TextInput autoCapitalize='none' value={kirim.email} onChangeText={v => setKirim({
+            <TextInput placeholderTextColor={colors.border_form} autoCapitalize='none' value={kirim.email} onChangeText={v => setKirim({
               ...kirim,
               email: v
             })}
@@ -154,7 +154,7 @@ export default function Login({ navigation }) {
             }}>
               <Icon type='ionicon' name='lock-closed-outline' size={myDimensi / 1.6} color={colors.primary} />
             </View>
-            <TextInput autoCapitalize='none' value={kirim.password} onChangeText={v => setKirim({
+            <TextInput placeholderTextColor={colors.border_form} autoCapitalize='none' value={kirim.password} onChangeText={v => setKirim({
               ...kirim,
               password: v
             })} secureTextEntry={buka} style={{

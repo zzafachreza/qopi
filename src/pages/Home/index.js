@@ -104,16 +104,12 @@ export default function Home({ navigation, route }) {
 
     getData('token').then(res => {
       // console.log('tokenSAYA', res.token);
-
-
-
-
       axios.post(apiURL + 'v1_token_update.php', {
         api_token: urlToken,
         id: id,
         token: res.token
       }).then(zvl => {
-        console.log('UPDATE TOKEN', zvl.data)
+        // console.log('UPDATE TOKEN', zvl.data)
       })
     })
 
