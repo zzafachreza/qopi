@@ -140,6 +140,17 @@ export default function AccountMember({ navigation, route }) {
                     </View>
                 </ImageBackground>
                 <Text style={{
+                    marginTop: -30,
+                    textAlign: 'center',
+                    fontFamily: fonts.primary[400],
+                    fontSize: myDimensi / 2,
+                    color: colors.black,
+                    marginBottom: 20,
+                }}>
+                    Yuk Lakukan Transaksi Sekarang! 1 transaksi sama dengan 1 poin! Kumpulkan poinmu dan jadilah Sultan
+                </Text>
+
+                <Text style={{
                     textAlign: 'center',
                     fontFamily: fonts.primary[400],
                     fontSize: myDimensi / 2,
