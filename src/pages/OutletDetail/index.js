@@ -17,14 +17,15 @@ export default function OutletDetail({ navigation, route }) {
             backgroundColor: colors.white,
         }}>
             <View style={{
-                height: windowHeight / 3.4,
+                flex: 1,
+                height: windowHeight / 2,
             }}>
-                {/* <WebView source={{ uri: i.link }} /> */}
-                <WebView source={{ html: base64.decode(i.embed).replace('width="600"', 'width="100%"').replace('height="450"', 'height="100%"') }} />
+                <WebView source={{ uri: i.link }} />
+                {/* <WebView source={{ html: base64.decode(i.embed).replace('width="600"', 'width="100%"').replace('height="450"', 'height="100%"') }} /> */}
             </View>
             <View style={{
                 padding: 10,
-                flex: 1,
+                // flex: 1,
             }}>
                 <Text style={{
                     fontFamily: fonts.secondary[600],
@@ -37,7 +38,7 @@ export default function OutletDetail({ navigation, route }) {
                     color: colors.border_label,
                 }}>{i.alamat_outlet}</Text>
             </View>
-            <View style={{
+            {/* <View style={{
                 padding: 10,
                 flex: 1,
             }}>
@@ -57,7 +58,7 @@ export default function OutletDetail({ navigation, route }) {
                         <MyButton onPress={() => Linking.openURL(i.link)} title="Lokasi" warna={colors.primary} Icons='navigate-outline' />
                     </View>
                 </View>
-            </View>
+            </View> */}
             <View style={{
                 padding: 10
             }}>
@@ -66,8 +67,9 @@ export default function OutletDetail({ navigation, route }) {
                         u.fid_outlet = i.id,
                             u.nama_outlet = i.nama_outlet,
                             u.alamat_outlet = i.alamat_outlet,
+                            u.tipe_harga = i.tipe_harga
 
-                            console.log(u);
+                        console.log(u);
                         storeData('user', u);
                         navigation.replace('MainApp')
                     })

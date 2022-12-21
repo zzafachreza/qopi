@@ -56,7 +56,7 @@ export default function Cart({ navigation, route }) {
         var bulanIndo = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
         var dd = x.split("-");
 
-        return dd[2] + ' ' + bulanIndo[dd[1]] + ' ' + dd[0];
+        return dd[2] + ' ' + bulanIndo[dd[1] - 1] + ' ' + dd[0];
 
     }
 

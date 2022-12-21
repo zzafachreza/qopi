@@ -12,14 +12,15 @@ export default function ProductCategory({ navigation, route }) {
     const [produk, setProduk] = useState([]);
     const [loading, setLoading] = useState(false);
     useEffect(() => {
-        getProduk();
+        getProduk(route.params.tipe_harga);
     }, [])
 
-    const getProduk = () => {
+    const getProduk = (tipe_harga) => {
         setLoading(true)
         axios.post(apiURL + 'v1_produk.php', {
             api_token: urlToken,
-            fid_kategori: route.params.fid_kategori
+            fid_kategori: route.params.fid_kategori,
+            tipe_harga: tipe_harga
         }).then(res => {
             console.log(res.data);
             setProduk(res.data);

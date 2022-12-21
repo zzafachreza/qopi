@@ -1,4 +1,4 @@
-import { FlatList, Image, Linking, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, FlatList, Image, Linking, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { colors } from '../../utils/colors'
 import { apiURL, getData, storeData, urlToken } from '../../utils/localStorage';
@@ -48,17 +48,29 @@ export default function Home({ navigation, route }) {
     });
 
 
-
-
     getData('user').then(u => {
       if (!u) {
         setUser({
           nama_lengkap: 'Qopi untuk semua',
           nama_outlet: 'Silahkan pilih',
           alamat_outlet: '',
-        })
+          tipe_harga: 1,
+        });
+
+        getProduk(1);
+        getTerbaik(1);
+        getKategori(1);
+
       } else {
         setUser(u);
+
+        getProduk(u.tipe_harga);
+        getTerbaik(u.tipe_harga);
+        getKategori(u.tipe_harga);
+
+        if (u.nama_outlet == 'Silahkan pilih') {
+          navigation.navigate('Outlet');
+        }
         UpdateToken(u.id);
         if (isFocused) {
           UpdateCart(u.id);
@@ -66,9 +78,10 @@ export default function Home({ navigation, route }) {
         }
       }
     });
-    getProduk();
-    getTerbaik();
-    getKategori();
+
+
+
+
 
     return unsubscribe;
 
@@ -116,7 +129,7 @@ export default function Home({ navigation, route }) {
   }
 
 
-  const getKategori = () => {
+  const getKategori = (tipe_harga) => {
     axios.post(apiURL + 'v1_kategori.php', {
       api_token: urlToken,
     }).then(res => {
@@ -126,9 +139,10 @@ export default function Home({ navigation, route }) {
 
 
 
-  const getProduk = () => {
+  const getProduk = (tipe_harga) => {
     axios.post(apiURL + 'v1_produk.php', {
       api_token: urlToken,
+      tipe_harga: tipe_harga
     }).then(res => {
       // console.log(res.data);
       setProduk(res.data);
@@ -136,9 +150,10 @@ export default function Home({ navigation, route }) {
   }
 
 
-  const getTerbaik = () => {
+  const getTerbaik = (tipe_harga) => {
     axios.post(apiURL + 'v1_terbaik.php', {
       api_token: urlToken,
+      tipe_harga: tipe_harga
     }).then(res => {
       // console.log('terbaik', res.data);
       setBest(res.data);
@@ -521,6 +536,13 @@ export default function Home({ navigation, route }) {
               }}>{best.nama_barang}</Text>
 
               <Text style={{
+                fontFamily: fonts.primary[600],
+                fontSize: myDimensi / 2,
+                marginBottom: 5,
+                color: colors.white
+              }}>Rp. {new Intl.NumberFormat().format(best.harga_barang)}</Text>
+
+              <Text style={{
                 fontFamily: fonts.primary[400],
                 fontSize: myDimensi / 2.5,
                 marginBottom: 5,
@@ -565,7 +587,8 @@ export default function Home({ navigation, route }) {
               return (
                 <TouchableOpacity onPress={() => navigation.navigate('ProductCategory', {
                   fid_kategori: i.id,
-                  nama_kategori: i.nama_kategori
+                  nama_kategori: i.nama_kategori,
+                  tipe_harga: user.tipe_harga
                 })} style={{
                   justifyContent: 'center',
                   alignItems: 'center',
