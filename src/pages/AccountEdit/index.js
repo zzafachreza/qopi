@@ -111,7 +111,11 @@ export default function AccountEdit({ navigation, route }) {
         console.log('kirim edit', data);
         axios.post(apiURL + '/v1_profile_update.php', data).then(res => {
             console.log(res.data);
-            storeData('user', res.data);
+            let userUpdate = res.data;
+            userUpdate['fid_outlet'] = data.fid_outlet;
+            userUpdate['nama_outlet'] = data.nama_outlet;
+            userUpdate['tipe_harga'] = data.tipe_harga;
+            storeData('user', userUpdate);
             setLoading(false);
             showMessage({
                 type: 'success',
